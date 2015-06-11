@@ -1,0 +1,8 @@
+Description:
+    Creates a new postCSS fragment.
+
+Example:
+    yo fragment:css thing
+
+    This will create:
+        ./thing.css

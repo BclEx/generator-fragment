@@ -1,0 +1,8 @@
+Description:
+    Creates a new htmlt fragment.
+
+Example:
+    yo fragment:html thing
+
+    This will create:
+        ./thing.html

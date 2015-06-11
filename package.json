@@ -1,0 +1,52 @@
+{
+  "name": "generator-fragment",
+  "version": "0.1.0",
+  "description": "A Yeoman generator for multiple fragments",
+  "license": "MIT",
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BclEx/generator-fragment"
+  },
+  "author": {
+    "name": "BclEx",
+    "url": "https://github.com/BclEx"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "files": [
+    "_knex-mssql",
+    "css",
+    "html",
+    "js",
+    "knex"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "~0.16.0",
+    "lodash": "~3.9.3",
+    "chalk": "~0.4.0",
+    "yosay": "^0.1.0",
+    "knex": "~0.8.6"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "jshint-stylish": "^2.0.0"
+  },
+  "peerDependencies": {},
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/BclEx/generator-fragment/issues"
+  },
+  "homepage": "http://BclEx.github.io/generator-fragment/",
+  "_id": "generator-fragment@0.1.0",
+  "_from": "generator-fragment@"
+}
