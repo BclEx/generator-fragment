@@ -1,7 +1,7 @@
 'use strict';
 var util = require('util');
 var path = require('path');
-var fs_ = require('fs')
+var fs = require('fs')
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
@@ -14,7 +14,7 @@ var Generator = module.exports = function Generator() {
     this.options.ctx = {};
     try {
       var filePath = path.join(process.cwd(), this.name + '.json');
-      this.options.ctx = eval('[' + fs_.readFileSync(filePath, 'utf8') + ']')[0];
+      this.options.ctx = eval('[' + fs.readFileSync(filePath, 'utf8') + ']')[0];
     } catch (e) { this.log(chalk.bold(e)); }
   }
 };

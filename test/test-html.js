@@ -5,7 +5,7 @@ var fs = require('fs');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment:knex generator tests', function () {
+describe('fragment:html generator tests', function () {
   
   var angular;
   var genOptions = {
@@ -15,22 +15,17 @@ describe('fragment:knex generator tests', function () {
     'skip-message': true
   };
   
-  describe('knex endpoints reached', function () {
+  describe('html endpoints reached', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
-        angular = helpers.createGenerator('fragment:knex', [
-           '../knex'
+        angular = helpers.createGenerator('fragment:html', [
+           '../html'
         ], [{
 	         'build': function (knex) {
-              // test knex 
-          		return knex.schema.createTable('users', function (table) {
-            			table.increments();
-            			table.string('name');
-            			table.timestamps();
-          		});
+
            }
         }], genOptions);
         done();
@@ -38,8 +33,8 @@ describe('fragment:knex generator tests', function () {
     });
     it('can be loaded by object', function (done) {
         angular.run({ }, function () {
-          assert.file(['tmp/name.sql']);
-          assert.fileContent('tmp/name.sql', /create/);
+          assert.file(['tmp/name.css']);
+          assert.fileContent('tmp/name.css', /create/);
           done();
         }.bind(angular));
     });
