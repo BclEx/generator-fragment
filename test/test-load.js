@@ -1,19 +1,20 @@
 'use strict';
 
-var path = require('path');
 var fs = require('fs');
+var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
 describe('fragment generator load test', function () {
+
   it('can be imported without blowing up', function () {
     assert(require('../app') !== undefined);
     assert(require('../css') !== undefined);
     assert(require('../html') !== undefined);
     assert(require('../js') !== undefined);
-    assert(require('../knex') !== undefined);
+    assert(require('../sql') !== undefined);
   });
-  
+
   var angular;
   var genOptions = {
     'appPath': 'app',
@@ -28,10 +29,10 @@ describe('fragment generator load test', function () {
         if (err) {
           done(err);
         }
-        fs.writeFileSync(path.join(__dirname, '../tmp', 'name-x.json'), 
+        fs.writeFileSync(path.join(__dirname, '../tmp', 'name-x.json'),
 "{\
-	'key': 'value0',\
-	'func': function () { return 'value1' } \
+	key: 'value0',\
+	func: function () { return 'value1'; } \
 }", 'utf8');
         angular = helpers.createGenerator('fragment:app', [
            '../app'
@@ -40,15 +41,15 @@ describe('fragment generator load test', function () {
       });
     });
     it('can be loaded by name', function (done) {
-        angular.run({ }, function () {
-          assert(this.options.ctx.key == 'value0');
-          assert(this.options.ctx.func() == 'value1');
-          done();
-        }.bind(angular));
+      angular.run({}, function () {
+        assert(this.options.args.key == 'value0');
+        assert(this.options.args.func() == 'value1');
+        done();
+      }.bind(angular));
     });
   });
-  
-  describe('load context by object', function () {
+
+  describe('load context by name as object', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
@@ -57,36 +58,58 @@ describe('fragment generator load test', function () {
         angular = helpers.createGenerator('fragment:app', [
            '../app'
         ], [{
-          'key': 'value0',
-	         'func': function () { return 'value1' }
+          key: 'value0',
+          func: function () { return 'value1'; }
         }], genOptions);
         done();
       });
     });
-    it('can be loaded by object', function (done) {
-        angular.run({ }, function () {
-          assert(this.options.ctx.key == 'value0');
-          assert(this.options.ctx.func() == 'value1');
-          done();
-        }.bind(angular));
+    it('can be loaded by name as object', function (done) {
+      angular.run({}, function () {
+        assert(this.options.args.key == 'value0');
+        assert(this.options.args.func() == 'value1');
+        done();
+      }.bind(angular));
     });
   });
-  
-  
-    
+
+  describe('load context by arguments', function () {
+    before(function (done) {
+      helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
+        if (err) {
+          done(err);
+        }
+        angular = helpers.createGenerator('fragment:app', [
+           '../app'
+        ], [null], genOptions);
+        done();
+      });
+    });
+    it('can be loaded by arguments', function (done) {
+      angular.options.args = {
+        'key': 'value0',
+        'func': function () { return 'value1' }
+      };
+      angular.run({}, function () {
+        assert(this.options.args.key == 'value0');
+        assert(this.options.args.func() == 'value1');
+        done();
+      }.bind(angular));
+    });
+  });
+
 });
 
-
-    // before(function (done) {
-    //   helpers.run(path.join(__dirname, '../app'))
-    //     .inDir(path.join(__dirname, './tmp'), f  unction (dir) {
-    //       //fs.copySync(path.join(__dirname, '../templates/test'), dir);
-    //     })
-    //     .withOptions({ foo: 'bar' })
-    //     .withArguments(['name-x'])
-    //     // .on('ready', function (generator) {
-    //     //   // var deps = ['./app'];
-    //     //   // angular = helpers.createGenerator('fragment:app', deps, { }}, genOptions);
-    //     // })
-    //    
-    // });
+// before(function (done) {
+//   helpers.run(path.join(__dirname, '../app'))
+//     .inDir(path.join(__dirname, './tmp'), f  unction (dir) {
+//       //fs.copySync(path.join(__dirname, '../templates/test'), dir);
+//     })
+//     .withOptions({ foo: 'bar' })
+//     .withArguments(['name-x'])
+//     // .on('ready', function (generator) {
+//     //   // var deps = ['./app'];
+//     //   // angular = helpers.createGenerator('fragment:app', deps, { }}, genOptions);
+//     // })
+//    
+// });

@@ -6,7 +6,7 @@ var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
 describe('fragment:html generator tests', function () {
-  
+
   var angular;
   var genOptions = {
     'appPath': 'app',
@@ -14,7 +14,7 @@ describe('fragment:html generator tests', function () {
     'skip-welcome-message': true,
     'skip-message': true
   };
-  
+
   describe('html endpoints reached', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
@@ -23,21 +23,17 @@ describe('fragment:html generator tests', function () {
         }
         angular = helpers.createGenerator('fragment:html', [
            '../html'
-        ], [{
-	         'build': function (knex) {
-
-           }
-        }], genOptions);
+        ], [null], genOptions);
         done();
       });
     });
     it('can be loaded by object', function (done) {
-        angular.run({ }, function () {
-          assert.file(['tmp/name.css']);
-          assert.fileContent('tmp/name.css', /create/);
-          done();
-        }.bind(angular));
+      angular.run({}, function () {
+        assert.file(['../tmp/name.css']);
+        assert.fileContent('../tmp/name.css', /create/);
+        done();
+      }.bind(angular));
     });
   });
-  
+
 });

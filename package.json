@@ -33,7 +33,8 @@
     "lodash": "~3.9.3",
     "chalk": "~0.4.0",
     "yosay": "^0.1.0",
-    "knex": "~0.8.6"
+    "knex": "~0.8.6",
+    "postcss": "^4.1.11"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
