@@ -32,13 +32,13 @@ Generator.prototype.createFiles = function (args) {
   // build content
   var source;
   if (args.client == 'mssql') {
-    source = this.generateSource(args, isValid, null, mssqlMap);
+    source = this.generateSource(args, isValid, toSource, mssqlMap, null);
   } else {
-    var knex_ = null;
+    var $ = null;
     try {
-      knex_ = knex({ client: args.client });
-    } catch (e) { this.log(chalk.bold(e)); return null; }
-    source = this.generateSource(args, isValid, knex_, knexMap);
+      $ = knex({ client: args.client });
+    } catch (e) { this.log(chalk.bold(e)); return; }
+    source = this.generateSource(args, isValid, toSource, knexMap, $);
   }
   this.log(source);
 
@@ -47,9 +47,12 @@ Generator.prototype.createFiles = function (args) {
   this.dest.write(path, source);
 };
 
-// Ensure a prototype method is a candidate run by default
 function isValid(name) {
   return name.charAt(0) !== '_' && name != 'client' && name !== 'constructor';
+}
+
+function toSource(obj) {
+    return obj.toString() + '\n';
 }
 
 function mssqlMap() {
@@ -63,17 +66,17 @@ function mssqlMap() {
 };
 
 // [http://knexjs.org/]
-function knexMap(prop, args, k) {
+function knexMap(prop, args, p) {
   var self = this;
   var cb = function (table) {
     return knexSchemaBuildingMap.call(self, prop, args, table);
   };
-  if (prop.hasOwnProperty('createTable')) return k.schema.createTable(prop.createTable, cb);
-  else if (prop.hasOwnProperty('renameTable')) return k.schema.renameTable(prop.renameTable.from, prop.renameTable.to);
-  else if (prop.hasOwnProperty('dropTable')) return k.schema.dropTable(prop.dropTable);
-  else if (prop.hasOwnProperty('dropTableIfExists')) return k.schema.dropTableIfExists(prop.dropTableIfExists);
-  else if (prop.hasOwnProperty('table')) return k.schema.table(prop.table, cb);
-  else if (prop.hasOwnProperty('raw')) return k.schema.raw(prop.raw);
+  if (prop.hasOwnProperty('createTable')) return p.schema.createTable(prop.createTable, cb);
+  else if (prop.hasOwnProperty('renameTable')) return p.schema.renameTable(prop.renameTable.from, prop.renameTable.to);
+  else if (prop.hasOwnProperty('dropTable')) return p.schema.dropTable(prop.dropTable);
+  else if (prop.hasOwnProperty('dropTableIfExists')) return p.schema.dropTableIfExists(prop.dropTableIfExists);
+  else if (prop.hasOwnProperty('table')) return p.schema.table(prop.table, cb);
+  else if (prop.hasOwnProperty('raw')) return p.schema.raw(prop.raw);
   else this.log(chalk.red('ERR! ' + JSON.stringify(prop) + ' not defined'));
   return null;
 };
@@ -83,7 +86,7 @@ function knexSchemaBuildingMap(element, args, t) {
     this.log(chalk.red('ERR! { t: not defined }'));
     return;
   }
-  element.t.forEach(function (prop) {
+  _.forEach(element.t, function (prop) {
     var self = this;
     var c = function (column) {
       return knexChainableMap.call(self, prop, column);

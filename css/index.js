@@ -21,54 +21,38 @@ var Generator = module.exports = function Generator() {
 util.inherits(Generator, scriptBase);
 
 Generator.prototype.createFiles = function (args) {
-  this.log(chalk.green('Building sql...'));
+  this.log(chalk.green('Building css...'));
   args = args || this.options.args;
-  args.client = args.client || 'mysql';
 
   // build content
   var source;
-  if (args.client == 'mssql') {
-    source = this.generateSource(args, isValid, null, mssqlMap);
-  } else {
-    var knex_ = null;
-    try {
-      knex_ = knex({ client: args.client });
-    } catch (e) { this.log(chalk.bold(e)); return null; }
-    source = this.generateSource(args, isValid, knex_, knexMap);
-  }
+  // var $ = null;
+  // try {
+  //   $ = postcss();
+  // } catch (e) { this.log(chalk.bold(e)); return; }
+  source = this.generateSource(args, isValid, toSource, postCssMap, postcss);
   this.log(source);
 
   // write content
-  this.dest.write('name.css', source);
+  var path = args._path + '.css';
+  this.dest.write(path, source);
 };
 
-// Ensure a prototype method is a candidate run by default
 function isValid(name) {
   return name.charAt(0) !== '_' && name !== 'constructor';
 }
 
+function toSource(obj) {
+    return obj.toString() + '\n';
+}
 
 // [https://github.com/postcss/postcss/blob/master/docs/api.md]
-function postCSSMap(k, ctx) {
-  ctx.forEach(function (prop) {
-    var cb = function (table) {
-      return knexSchemaBuildingMap(ctx, prop, table);
-    };
-    if (prop.createTable) {
-      return k.schema.createTable(prop.createTable, cb);
-    } else if (prop.renameTable) {
-      return k.schema.renameTable(prop.renameTable.from, prop.renameTable.to);
-    } else if (prop.dropTable) {
-      return k.schema.dropTable(prop.dropTable);
-    } else if (prop.dropTableIfExists) {
-      return k.schema.dropTableIfExists(prop.dropTableIfExists);
-    } else if (prop.table) {
-      return k.schema.table(prop.table, cb);
-    } else if (prop.raw) {
-      return k.schema.raw(prop.raw);
-    } else {
-      this.log(chalk.red('ERR! { [field]: not defined }'));
-    }
-    return null;
-  });
+function postCssMap(prop, args, p) {
+  if (prop.hasOwnProperty('root')) return p.root(prop.root);
+  else if (prop.hasOwnProperty('atRule')) return p.atRule(prop.atRule);
+  else if (prop.hasOwnProperty('rule')) return p.rule(prop.rule);
+  else if (prop.hasOwnProperty('decl')) return p.decl(prop.decl);
+  else if (prop.hasOwnProperty('comment')) return p.comment(prop.comment);
+  else this.log(chalk.red('ERR! ' + JSON.stringify(prop) + ' not defined'));
+  return null;
 };

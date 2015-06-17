@@ -5,7 +5,7 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment:css generator tests', function () {
+describe('fragment:app generator tests', function () {
 
   var fragment;
   var genOptions = {
@@ -15,36 +15,33 @@ describe('fragment:css generator tests', function () {
     'skip-message': true
   };
 
-  describe('css endpoints reached', function () {
+  describe('app endpoints reached', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
-        fragment = helpers.createGenerator('fragment:css', [
-           '../css'
+        fragment = helpers.createGenerator('fragment:app', [
+           '../app', '../css', '../html', '../js', '../sql'
         ], [null], genOptions);
         done();
       });
     });
     it('can have methods and properties intermixed', function (done) {
       fragment.options.args = {
-        _path: 'name0',
-        build0: function (args, $) {
-          var css = $.root();
-          for (var i = 1; i <= 3; i++) {
-            var rule = $.rule({selector: '[data-heading="' + i + '"]'});
-            rule.append($.decl({prop: 'width', value: (i * 10) }));
-            css.append(rule);
-          }
-          return css;
+        sql: {
+          _path: 'name0',
+          dropTable0: { dropTable: 'dropTable0' },
         },
-        build1: [{
-          rule: {selector: '[data-heading="60"]'}
-        }]
+        css: {
+          _path: 'name0',
+          build: [{
+            rule: {selector: '[data-heading="60"]'}
+          }]
+        },
       };
       fragment.run({}, function () {
-        assert.file(['../tmp/name0.css']);
+         // assert.file(['../tmp/name0.css', '../tmp/name0.sql']);
         // assert.fileContent('../tmp/name0.css', /create/);
         done();
       }.bind(fragment));

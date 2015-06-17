@@ -7,7 +7,7 @@ var assert = require('yeoman-generator').assert;
 
 describe('fragment:js generator tests', function () {
 
-  var angular;
+  var fragment;
   var genOptions = {
     'appPath': 'app',
     'skip-install': true,
@@ -15,24 +15,33 @@ describe('fragment:js generator tests', function () {
     'skip-message': true
   };
 
-  describe('css endpoints reached', function () {
+  describe('js endpoints reached', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
-        angular = helpers.createGenerator('fragment:js', [
+        fragment = helpers.createGenerator('fragment:js', [
            '../js'
         ], [null], genOptions);
         done();
       });
     });
-    it('can be loaded by object', function (done) {
-      angular.run({}, function () {
-        assert.file(['../tmp/name.js']);
-        assert.fileContent('../tmp/name.js', /create/);
+    it('can have methods and properties intermixed', function (done) {
+      fragment.options.args = {
+        _path: 'name0',
+        build0: function (args, $) {
+          return $;
+        },
+        _build1: [
+          { rule: {selector: '[data-heading="1"]'} }
+        ]
+      };
+      fragment.run({}, function () {
+        assert.file(['../tmp/name0.js']);
+        // assert.fileContent('../tmp/name0.js', /create/);
         done();
-      }.bind(angular));
+      }.bind(fragment));
     });
   });
 

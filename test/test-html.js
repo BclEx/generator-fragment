@@ -7,7 +7,7 @@ var assert = require('yeoman-generator').assert;
 
 describe('fragment:html generator tests', function () {
 
-  var angular;
+  var fragment;
   var genOptions = {
     'appPath': 'app',
     'skip-install': true,
@@ -21,18 +21,27 @@ describe('fragment:html generator tests', function () {
         if (err) {
           done(err);
         }
-        angular = helpers.createGenerator('fragment:html', [
+        fragment = helpers.createGenerator('fragment:html', [
            '../html'
         ], [null], genOptions);
         done();
       });
     });
-    it('can be loaded by object', function (done) {
-      angular.run({}, function () {
-        assert.file(['../tmp/name.css']);
-        assert.fileContent('../tmp/name.css', /create/);
+    it('can have methods and properties intermixed', function (done) {
+      fragment.options.args = {
+        _path: 'name0',
+        build0: function (args, $) {
+          //$('ul', '<ul id="fruits"></ul>');
+          return $;
+        },
+        _build1: [
+        ]
+      };
+      fragment.run({}, function () {
+        assert.file(['../tmp/name0.html']);
+        // assert.fileContent('../tmp/name0.css', /create/);
         done();
-      }.bind(angular));
+      }.bind(fragment));
     });
   });
 

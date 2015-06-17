@@ -23,31 +23,31 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, yeoman.generators.NamedBase);
 
-Generator.prototype.generateSource = function (args, isValid, methodArgs, propMethod) {
+Generator.prototype.generateSource = function (args, isValid, toSource, propMethod, methodArgs) {
 
   //var self = this;
   var props = Object.getOwnPropertyNames(args);
   var validProps = props.filter(isValid);
   assert(validProps.length, 'This Context is empty. Add at least one method for it to run.');
 
-  function toSource(obj) {
-      return obj.toString() + '\n';
+  var source = '';
+  function parseNode(item) {
+    if (_.isFunction(item)) {
+        source += toSource(item.call(this, args, methodArgs));
+    } else if (_.isArray(item)) {
+      _.forEach(item, function (subItem) {
+        parseNode(subItem);
+      });
+    } else if (_.isObject(item)) {
+        source += toSource(propMethod.call(this, item, args, methodArgs));
+    }
   }
 
-  var source = '';
   validProps.forEach(function (name) {
     var item = args[name];
-    if (_.isFunction(item)) {
-      try {
-        source += toSource(item.call(this, args, methodArgs));
-      } catch (err) { this.log(chalk.bold(err)); }
-      return;
-    } else if (_.isObject(item)) {
-      try {
-        source += toSource(propMethod.call(this, item, args, methodArgs));
-      } catch (err) { this.log(chalk.bold(err)); }
-      return;
-    }
+    try {
+      parseNode.call(this, item);
+    } catch (err) { this.log(chalk.bold(err)); }
   }.bind(this));
   
   return source;

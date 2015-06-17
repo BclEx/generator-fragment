@@ -7,7 +7,7 @@ var assert = require('yeoman-generator').assert;
 
 describe('fragment:sql generator tests', function () {
 
-  var angular;
+  var fragment;
   var genOptions = {
     'appPath': 'app',
     'skip-install': true,
@@ -21,18 +21,18 @@ describe('fragment:sql generator tests', function () {
         if (err) {
           done(err);
         }
-        angular = helpers.createGenerator('fragment:sql', [
+        fragment = helpers.createGenerator('fragment:sql', [
            '../sql'
         ], [null], genOptions);
         done();
       });
     });
     it('can have methods and properties intermixed', function (done) {
-      angular.options.args = {
+      fragment.options.args = {
         _path: 'name0',
         client: 'pg',
-        build0: function (args, knex) {
-          return knex.schema.createTable('createTable0', function (table) {
+        build0: function (args, $) {
+          return $.schema.createTable('createTable0', function (table) {
             table.increments();
             table.string('name');
             table.timestamps();
@@ -45,11 +45,11 @@ describe('fragment:sql generator tests', function () {
             { timestamps: null }]
         }
       };
-      angular.run({}, function () {
+      fragment.run({}, function () {
         assert.file(['../tmp/name0.sql']);
         assert.fileContent('../tmp/name0.sql', /create/);
         done();
-      }.bind(angular));
+      }.bind(fragment));
     });
   });
 
@@ -59,14 +59,14 @@ describe('fragment:sql generator tests', function () {
         if (err) {
           done(err);
         }
-        angular = helpers.createGenerator('fragment:sql', [
+        fragment = helpers.createGenerator('fragment:sql', [
            '../sql'
         ], [null], genOptions);
         done();
       });
     });
     it('test', function (done) {
-      angular.options.args = {
+      fragment.options.args = {
         _path: 'name0',
         client: 'pg',
         createTable0: { createTable: 'createTable0', t: [] },
@@ -84,11 +84,11 @@ describe('fragment:sql generator tests', function () {
         },
         raw0: { raw: 'raw0' }
       };
-      angular.run({}, function () {
+      fragment.run({}, function () {
         assert.file(['../tmp/name0.sql']);
         assert.fileContent('../tmp/name0.sql', /create/);
         done();
-      }.bind(angular));
+      }.bind(fragment));
     });
   });
 

@@ -10,21 +10,44 @@
 
 // External libs.
 var util = require('util');
-var path = require('path');
-var yeoman = require('yeoman-generator');
-var yosay = require('yosay');
+var scriptBase = require('../script-base.js');
+var chalk = require('chalk');
+var program = require('ast-query');
 
-var Generator = module.exports = yeoman.generators.NamedBase.extend({
-  	constructor: function () {
-    	yeoman.Base.apply(this, arguments);
+var Generator = module.exports = function Generator() {
+  scriptBase.apply(this, arguments);
+};
 
-    	// Next, add your custom code
-    	this.option('coffee'); // This method adds support for a `--coffee` flag
-  	},
-  	method1: function () {
-    	this.log('method 1 just ran');
-  	},
-  	method2: function () {
-    	this.log('method 2 just ran');
-  	}
-});
+util.inherits(Generator, scriptBase);
+
+Generator.prototype.createFiles = function (args) {
+  this.log(chalk.green('Building js...'));
+  args = args || this.options.args;
+
+  // build content
+  var source;
+  var $ = null;
+  try {
+    $ = program('');
+  } catch (e) { this.log(chalk.bold(e)); return; }
+  source = this.generateSource(args, isValid, toSource, astMap, $);
+  this.log(source);
+
+  // write content
+  var path = args._path + '.js';
+  this.dest.write(path, source);
+};
+
+function isValid(name) {
+  return name.charAt(0) !== '_' && name !== 'constructor';
+}
+
+function toSource(obj) {
+    return obj.toString() + '\n';
+}
+
+// [https://github.com/SBoudrias/AST-query]
+// [https://github.com/ariya/esprima]
+function astMap(prop, args, p) {
+  return null;
+};

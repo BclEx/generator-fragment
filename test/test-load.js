@@ -15,7 +15,7 @@ describe('fragment generator load test', function () {
     assert(require('../sql') !== undefined);
   });
 
-  var angular;
+  var fragment;
   var genOptions = {
     'appPath': 'app',
     'skip-install': true,
@@ -34,18 +34,18 @@ describe('fragment generator load test', function () {
 	key: 'value0',\
 	func: function () { return 'value1'; } \
 }", 'utf8');
-        angular = helpers.createGenerator('fragment:app', [
+        fragment = helpers.createGenerator('fragment:app', [
            '../app'
         ], ['name-x'], genOptions);
         done();
       });
     });
     it('can be loaded by name', function (done) {
-      angular.run({}, function () {
+      fragment.run({}, function () {
         assert(this.options.args.key == 'value0');
         assert(this.options.args.func() == 'value1');
         done();
-      }.bind(angular));
+      }.bind(fragment));
     });
   });
 
@@ -55,7 +55,7 @@ describe('fragment generator load test', function () {
         if (err) {
           done(err);
         }
-        angular = helpers.createGenerator('fragment:app', [
+        fragment = helpers.createGenerator('fragment:app', [
            '../app'
         ], [{
           key: 'value0',
@@ -65,11 +65,11 @@ describe('fragment generator load test', function () {
       });
     });
     it('can be loaded by name as object', function (done) {
-      angular.run({}, function () {
+      fragment.run({}, function () {
         assert(this.options.args.key == 'value0');
         assert(this.options.args.func() == 'value1');
         done();
-      }.bind(angular));
+      }.bind(fragment));
     });
   });
 
@@ -79,22 +79,22 @@ describe('fragment generator load test', function () {
         if (err) {
           done(err);
         }
-        angular = helpers.createGenerator('fragment:app', [
+        fragment = helpers.createGenerator('fragment:app', [
            '../app'
         ], [null], genOptions);
         done();
       });
     });
     it('can be loaded by arguments', function (done) {
-      angular.options.args = {
+      fragment.options.args = {
         'key': 'value0',
         'func': function () { return 'value1' }
       };
-      angular.run({}, function () {
+      fragment.run({}, function () {
         assert(this.options.args.key == 'value0');
         assert(this.options.args.func() == 'value1');
         done();
-      }.bind(angular));
+      }.bind(fragment));
     });
   });
 
@@ -109,7 +109,7 @@ describe('fragment generator load test', function () {
 //     .withArguments(['name-x'])
 //     // .on('ready', function (generator) {
 //     //   // var deps = ['./app'];
-//     //   // angular = helpers.createGenerator('fragment:app', deps, { }}, genOptions);
+//     //   // fragment = helpers.createGenerator('fragment:app', deps, { }}, genOptions);
 //     // })
 //    
 // });
