@@ -24,8 +24,6 @@ var Generator = module.exports = function Generator() {
 util.inherits(Generator, yeoman.generators.NamedBase);
 
 Generator.prototype.generateSource = function (args, isValid, toSource, propMethod, methodArgs) {
-
-  //var self = this;
   var props = Object.getOwnPropertyNames(args);
   var validProps = props.filter(isValid);
   assert(validProps.length, 'This Context is empty. Add at least one method for it to run.');

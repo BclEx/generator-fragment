@@ -15,8 +15,7 @@ describe('fragment generator load test', function () {
     assert(require('../sql') !== undefined);
   });
 
-  var fragment;
-  var genOptions = {
+  var fragment, genOptions = {
     'appPath': 'app',
     'skip-install': true,
     'skip-welcome-message': true,
@@ -87,8 +86,8 @@ describe('fragment generator load test', function () {
     });
     it('can be loaded by arguments', function (done) {
       fragment.options.args = {
-        'key': 'value0',
-        'func': function () { return 'value1' }
+        key: 'value0',
+        func: function () { return 'value1'; }
       };
       fragment.run({}, function () {
         assert(this.options.args.key == 'value0');
@@ -99,17 +98,3 @@ describe('fragment generator load test', function () {
   });
 
 });
-
-// before(function (done) {
-//   helpers.run(path.join(__dirname, '../app'))
-//     .inDir(path.join(__dirname, './tmp'), f  unction (dir) {
-//       //fs.copySync(path.join(__dirname, '../templates/test'), dir);
-//     })
-//     .withOptions({ foo: 'bar' })
-//     .withArguments(['name-x'])
-//     // .on('ready', function (generator) {
-//     //   // var deps = ['./app'];
-//     //   // fragment = helpers.createGenerator('fragment:app', deps, { }}, genOptions);
-//     // })
-//    
-// });

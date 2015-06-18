@@ -20,7 +20,7 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function (args) {
+Generator.prototype.createFiles = function createFiles(args) {
   this.log(chalk.green('Building html...'));
   args = args || this.options.args;
 

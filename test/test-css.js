@@ -7,8 +7,7 @@ var assert = require('yeoman-generator').assert;
 
 describe('fragment:css generator tests', function () {
 
-  var fragment;
-  var genOptions = {
+  var fragment, genOptions = {
     'appPath': 'app',
     'skip-install': true,
     'skip-welcome-message': true,

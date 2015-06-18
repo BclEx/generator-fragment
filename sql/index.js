@@ -24,7 +24,7 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function (args) {
+Generator.prototype.createFiles = function createFiles(args) {
   this.log(chalk.green('Building sql...'));
   args = args || this.options.args;
   args.client = args.client || 'mysql';
@@ -99,17 +99,17 @@ function knexSchemaBuildingMap(element, args, t) {
     else if (prop.hasOwnProperty('bigInteger')) c(t.bigInteger(prop.bigInteger.name));
     else if (prop.hasOwnProperty('text')) c(t.text(prop.text.name, prop.text.textType));
     else if (prop.hasOwnProperty('string')) c(t.string(prop.string.name, prop.string.length));
-    else if (prop.hasOwnProperty('float')) c(t.float(prop.float.column, prop.float.precision, prop.float.scale));
-    else if (prop.hasOwnProperty('decimal')) c(t.decimal(prop.decimal.column, prop.decimal.precision, prop.decimal.scale));
+    else if (prop.hasOwnProperty('float')) c(t.float(prop.float.name, prop.float.precision, prop.float.scale));
+    else if (prop.hasOwnProperty('decimal')) c(t.decimal(prop.decimal.name, prop.decimal.precision, prop.decimal.scale));
     else if (prop.hasOwnProperty('boolean')) c(t.boolean(prop.boolean.name));
-    else if (prop.hasOwnProperty('date')) c(t.boolean(prop.date.name));
+    else if (prop.hasOwnProperty('date')) c(t.date(prop.date.name));
     else if (prop.hasOwnProperty('dateTime')) c(t.dateTime(prop.dateTime.name));
     else if (prop.hasOwnProperty('time')) c(t.time(prop.time.name));
     else if (prop.hasOwnProperty('timestamp')) c(t.timestamp(prop.timestamp.name, prop.timestamp.standard));
     else if (prop.hasOwnProperty('timestamps')) c(t.timestamps());
     else if (prop.hasOwnProperty('binary')) c(t.binary(prop.binary.name, prop.binary.length));
-    else if (prop.hasOwnProperty('enu')) c(t.enu(prop.enu.col, prop.enu.values));
-    else if (prop.hasOwnProperty('json')) c(t.json(prop.json.col, prop.json.jsonb));
+    else if (prop.hasOwnProperty('enu')) c(t.enu(prop.enu.name, prop.enu.values));
+    else if (prop.hasOwnProperty('json')) c(t.json(prop.json.name, prop.json.jsonb));
     else if (prop.hasOwnProperty('uuid')) c(t.uuid(prop.uuid.name));
     else if (prop.hasOwnProperty('comment')) c(t.comment(prop.comment));
     else if (prop.hasOwnProperty('engine')) {
@@ -123,7 +123,7 @@ function knexSchemaBuildingMap(element, args, t) {
     else if (prop.hasOwnProperty('collate')) {
       if (element.createTable && args.client == 'mysql') c(t.collate(prop.collate));
       else this.log(chalk.red('only available within a createTable call, and only applicable to MySQL.'));
-    } else if (prop.specificType) c(t.specificType(prop.specificType.column, prop.specificType.value));
+    } else if (prop.specificType) c(t.specificType(prop.specificType.name, prop.specificType.value));
     else this.log(chalk.red('ERR! ' + JSON.stringify(prop) + ' not defined'));
   }.bind(this));
 };

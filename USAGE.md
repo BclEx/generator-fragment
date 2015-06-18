@@ -1,0 +1,114 @@
+# fragment or fragment:app  
+
+> The fragment generator works with methods or object definitions.
+
+	{
+		css {
+			_path: 'path to file location',
+			anymethod: function(args, $) {
+				... method declaration (see below)
+			},
+			anyobject: {
+				... object declaration (see below)
+			}
+		},
+		html {
+			_path: 'path to file location',
+			anymethod: function(args, $) {
+				... method declaration (see below)
+			},
+			anyobject: {
+				... object declaration (see below)
+			}
+		},
+		js {
+			_path: 'path to file location',
+			anymethod: function(args, $) {
+				... method declaration (see below)
+			},
+			anyobject: {
+				... object declaration (see below)
+			}
+		},
+		sql {
+			_path: 'path to file location',
+			client: 'type of sql client',
+			anymethod: function(args, $) {
+				... method declaration (see below)
+			},
+			anyobject: {
+				... object declaration (see below)
+			}
+		}
+	}
+
+see definition: [fragment](app/USAGE.md "fragment")
+
+
+# fragment:css
+
+> The css fragment generator works with methods or object definitions.
+
+	{
+		_path: 'path to file location',
+		anymethod: function(args, $) {
+			... method declaration (see below)
+		},
+		anyobject: {
+			... object declaration (see below)
+		}
+	}
+
+see definition: [fragment-css](css/USAGE.md "fragment-css")
+
+
+# fragment:html
+
+> The html fragment generator works with methods or object definitions.
+
+	{
+		_path: 'path to file location',
+		anymethod: function(args, $) {
+			... method declaration (see below)
+		},
+		anyobject: {
+			... object declaration (see below)
+		}
+	}
+
+see definition: [fragment-html](html/USAGE.md "fragment-html")
+
+
+# fragment:js
+
+> The js fragment generator works with methods or object definitions.
+
+	{
+		_path: 'path to file location',
+		anymethod: function(args, $) {
+			... method declaration (see below)
+		},
+		anyobject: {
+			... object declaration (see below)
+		}
+	}
+
+see definition: [fragment-js](js/USAGE.md "fragment-js")
+
+
+# fragment:sql
+
+> The sql fragment generator works with methods or object definitions.
+
+	{
+		_path: 'path to file location',
+		client: 'type of sql client',
+		anymethod: function(args, $) {
+			... method declaration (see below)
+		},
+		anyobject: {
+			... object declaration (see below)
+		}
+	}
+
+see definition: [fragment-sql](sql/USAGE.md "fragment-sql")
