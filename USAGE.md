@@ -10,7 +10,10 @@
 			},
 			anyobject: {
 				... object declaration (see below)
-			}
+			},
+			anyarray: [
+				... recurses [anymethod|anyobject|anyarray]
+			]
 		},
 		html {
 			_path: 'path to file location',
@@ -19,7 +22,10 @@
 			},
 			anyobject: {
 				... object declaration (see below)
-			}
+			},
+			anyarray: [
+				... recurses [anymethod|anyobject|anyarray]
+			]
 		},
 		js {
 			_path: 'path to file location',
@@ -28,7 +34,10 @@
 			},
 			anyobject: {
 				... object declaration (see below)
-			}
+			},
+			anyarray: [
+				... recurses [anymethod|anyobject|anyarray]
+			]
 		},
 		sql {
 			_path: 'path to file location',
@@ -38,7 +47,10 @@
 			},
 			anyobject: {
 				... object declaration (see below)
-			}
+			},
+			anyarray: [
+				... recurses [anymethod|anyobject|anyarray]
+			]
 		}
 	}
 
@@ -56,7 +68,10 @@ see definition: [fragment](app/USAGE.md "fragment")
 		},
 		anyobject: {
 			... object declaration (see below)
-		}
+		},
+		anyarray: [
+			... recurses [anymethod|anyobject|anyarray]
+		]
 	}
 
 see definition: [fragment-css](css/USAGE.md "fragment-css")
@@ -73,7 +88,10 @@ see definition: [fragment-css](css/USAGE.md "fragment-css")
 		},
 		anyobject: {
 			... object declaration (see below)
-		}
+		},
+		anyarray: [
+			... recurses [anymethod|anyobject|anyarray]
+		]
 	}
 
 see definition: [fragment-html](html/USAGE.md "fragment-html")
@@ -90,7 +108,10 @@ see definition: [fragment-html](html/USAGE.md "fragment-html")
 		},
 		anyobject: {
 			... object declaration (see below)
-		}
+		},
+		anyarray: [
+			... recurses [anymethod|anyobject|anyarray]
+		]
 	}
 
 see definition: [fragment-js](js/USAGE.md "fragment-js")
@@ -108,7 +129,10 @@ see definition: [fragment-js](js/USAGE.md "fragment-js")
 		},
 		anyobject: {
 			... object declaration (see below)
-		}
+		},
+		anyarray: [
+			... recurses [anymethod|anyobject|anyarray]
+		]
 	}
 
 see definition: [fragment-sql](sql/USAGE.md "fragment-sql")
