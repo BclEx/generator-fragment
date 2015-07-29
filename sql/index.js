@@ -24,26 +24,26 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function createFiles(args) {
+Generator.prototype.createFiles = function createFiles() {
   this.log(chalk.green('Building sql...'));
-  args = args || this.options.args;
-  args.client = args.client || 'mysql';
+  var ctx = this.options.ctx;
+  ctx.client = ctx.client || 'mysql';
 
   // build content
   var source;
-  if (args.client == 'mssql') {
-    source = this.generateSource(args, isValid, toSource, mssqlMap, null);
+  if (ctx.client == 'mssql') {
+    source = this.generateSource(ctx, isValid, toSource, mssqlMap, null);
   } else {
     var $ = null;
     try {
-      $ = knex({ client: args.client });
+      $ = knex({ client: ctx.client });
     } catch (e) { this.log(chalk.bold(e)); return; }
-    source = this.generateSource(args, isValid, toSource, knexMap, $);
+    source = this.generateSource(ctx, isValid, toSource, knexMap, $);
   }
   this.log(source);
 
   // write content
-  var path = args._path + '.sql';
+  var path = ctx._path + '.sql';
   this.fs.write(path, source);
 };
 

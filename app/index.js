@@ -18,25 +18,17 @@ var Generator = module.exports = function Generator() {
 
   this.on('end', function () {
     this.log(chalk.green('Building app...'));
-    if (this.options.args.css) {
-      this.composeWith('fragment:css', {
-        args: [this.options.args.css]
-      });
+    if (this.options.ctx.css) {
+      this.composeWith('fragment:css', { ctx: [this.options.ctx.css] });
     }
-    if (this.options.args.html) {
-      this.composeWith('fragment:html', {
-        args: [this.options.args.html]
-      });
+    if (this.options.ctx.html) {
+      this.composeWith('fragment:html', { ctx: [this.options.ctx.html] });
     }
-    if (this.options.args.js) {
-      this.composeWith('fragment:js', {
-        args: [this.options.args.js]
-      });
+    if (this.options.ctx.js) {
+      this.composeWith('fragment:js', { ctx: [this.options.ctx.js] });
     }
-    if (this.options.args.sql) {
-      this.composeWith('fragment:sql', {
-        args: [this.options.args.sql]
-      });
+    if (this.options.ctx.sql) {
+      this.composeWith('fragment:sql', { ctx: [this.options.ctx.sql] });
     }
   });
 

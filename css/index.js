@@ -20,9 +20,9 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function createFiles(args) {
+Generator.prototype.createFiles = function createFiles() {
   this.log(chalk.green('Building css...'));
-  args = args || this.options.args;
+  var ctx = this.options.ctx;
 
   // build content
   var source;
@@ -30,11 +30,11 @@ Generator.prototype.createFiles = function createFiles(args) {
   // try {
   //   $ = postcss();
   // } catch (e) { this.log(chalk.bold(e)); return; }
-  source = this.generateSource(args, isValid, toSource, postCssMap, postcss);
+  source = this.generateSource(ctx, isValid, toSource, postCssMap, postcss);
   this.log(source);
 
   // write content
-  var path = args._path + '.css';
+  var path = ctx._path + '.css';
   this.fs.write(path, source);
 };
 

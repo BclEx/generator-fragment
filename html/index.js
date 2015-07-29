@@ -20,9 +20,9 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function createFiles(args) {
+Generator.prototype.createFiles = function createFiles(ctx) {
   this.log(chalk.green('Building html...'));
-  args = args || this.options.args;
+  var ctx = this.options.ctx;
 
   // build content
   var source;
@@ -30,11 +30,11 @@ Generator.prototype.createFiles = function createFiles(args) {
   try {
     $ = cheerio.load('<html></html>');
   } catch (e) { this.log(chalk.bold(e)); return; }
-  source = this.generateSource(args, isValid, toSource, cheerioMap, $);
+  source = this.generateSource(ctx, isValid, toSource, cheerioMap, $);
   this.log(source);
 
   // write content
-  var path = args._path + '.html';
+  var path = ctx._path + '.html';
   this.fs.write(path, source);
 };
 

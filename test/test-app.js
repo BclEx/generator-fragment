@@ -27,7 +27,7 @@ describe('fragment:app generator tests.', function () {
       });
     });
     it('can have methods and properties intermixed.', function (done) {
-      fragment.options.args = {
+      fragment.options.ctx = {
         sql: {
           _path: 'name0',
           dropTable0: { dropTable: 'dropTable0' },

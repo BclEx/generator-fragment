@@ -27,7 +27,7 @@ describe('fragment:sql generator tests.', function () {
       });
     });
     it('can have methods and properties intermixed.', function (done) {
-      fragment.options.args = {
+      fragment.options.ctx = {
         _path: 'name0',
         client: 'pg',
         build0: function (args, $) {
@@ -65,7 +65,7 @@ describe('fragment:sql generator tests.', function () {
       });
     });
     it('test.', function (done) {
-      fragment.options.args = {
+      fragment.options.ctx = {
         _path: 'name0',
         client: 'pg',
         createTable0: { createTable: 'createTable0', t: [] },

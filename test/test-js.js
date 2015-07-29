@@ -27,7 +27,7 @@ describe('fragment:js generator tests.', function () {
       });
     });
     it('can have methods and properties intermixed.', function (done) {
-      fragment.options.args = {
+      fragment.options.ctx = {
         _path: 'name0',
         build0: function (args, $) {
           return $;

@@ -40,8 +40,8 @@ describe('load test.', function () {
     });
     it('can be loaded by name.', function (done) {
       fragment.run(function () {
-        assert(this.options.args.key == 'value0');
-        assert(this.options.args.func() == 'value1');
+        assert(this.options.ctx.key == 'value0');
+        assert(this.options.ctx.func() == 'value1');
         done();
       }.bind(fragment));
     });
@@ -64,8 +64,8 @@ describe('load test.', function () {
     });
     it('can be loaded by name as object.', function (done) {
       fragment.run(function () {
-        assert(this.options.args.key == 'value0');
-        assert(this.options.args.func() == 'value1');
+        assert(this.options.ctx.key == 'value0');
+        assert(this.options.ctx.func() == 'value1');
         done();
       }.bind(fragment));
     });
@@ -84,13 +84,13 @@ describe('load test.', function () {
       });
     });
     it('can be loaded by arguments.', function (done) {
-      fragment.options.args = {
+      fragment.options.ctx = {
         key: 'value0',
         func: function () { return 'value1'; }
       };
       fragment.run(function () {
-        assert(this.options.args.key == 'value0');
-        assert(this.options.args.func() == 'value1');
+        assert(this.options.ctx.key == 'value0');
+        assert(this.options.ctx.func() == 'value1');
         done();
       }.bind(fragment));
     });
