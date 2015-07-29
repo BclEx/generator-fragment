@@ -8,17 +8,20 @@ var chalk = require('chalk');
 var _ = require('lodash');
 
 var Generator = module.exports = function Generator() {
-  yeoman.generators.NamedBase.apply(this, arguments);
-  // Parse file
-  if (typeof this.name != 'string') {
-    this.options.args = this.name || {};
+  var a = arguments[0];
+  // parse args/file
+  var args = {};
+  if (typeof a[0] != 'string') {
+    args = a[0] || {};
+    arguments[0].shift();
   } else {
-    this.options.args = {};
     try {
-      var filePath = path.join(process.cwd(), this.name + '.json');
-      this.options.args = eval('[' + fs.readFileSync(filePath, 'utf8') + ']')[0];
+      var filePath = path.join(process.cwd(), a[0] + '.json');
+      args = eval('[' + fs.readFileSync(filePath, 'utf8') + ']')[0];
     } catch (e) { this.log(chalk.bold(e)); }
   }
+  yeoman.generators.Base.apply(this, arguments);
+  this.options.args = args;
 };
 
 util.inherits(Generator, yeoman.generators.NamedBase);
@@ -31,13 +34,13 @@ Generator.prototype.generateSource = function (args, isValid, toSource, propMeth
   var source = '';
   function parseNode(item) {
     if (_.isFunction(item)) {
-        source += toSource(item.call(this, args, methodArgs));
+      source += toSource(item.call(this, args, methodArgs));
     } else if (_.isArray(item)) {
       _.forEach(item, function (subItem) {
         parseNode(subItem);
       });
     } else if (_.isObject(item)) {
-        source += toSource(propMethod.call(this, item, args, methodArgs));
+      source += toSource(propMethod.call(this, item, args, methodArgs));
     }
   }
 
@@ -47,6 +50,6 @@ Generator.prototype.generateSource = function (args, isValid, toSource, propMeth
       parseNode.call(this, item);
     } catch (err) { this.log(chalk.bold(err)); }
   }.bind(this));
-  
+
   return source;
 };

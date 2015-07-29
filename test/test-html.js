@@ -5,7 +5,7 @@ var fs = require('fs');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment:html generator tests', function () {
+describe('fragment:html generator tests.', function () {
 
   var fragment, genOptions = {
     'appPath': 'app',
@@ -14,19 +14,19 @@ describe('fragment:html generator tests', function () {
     'skip-message': true
   };
 
-  describe('html endpoints reached', function () {
+  describe('html endpoints reached.', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
         fragment = helpers.createGenerator('fragment:html', [
-           '../html'
-        ], [null], genOptions);
+          '../html'
+        ], [], genOptions);
         done();
       });
     });
-    it('can have methods and properties intermixed', function (done) {
+    it('can have methods and properties intermixed.', function (done) {
       fragment.options.args = {
         _path: 'name0',
         build0: function (args, $) {
@@ -36,7 +36,7 @@ describe('fragment:html generator tests', function () {
         _build1: [
         ]
       };
-      fragment.run({}, function () {
+      fragment.run(function () {
         assert.file(['../tmp/name0.html']);
         // assert.fileContent('../tmp/name0.css', /create/);
         done();

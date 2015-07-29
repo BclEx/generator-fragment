@@ -35,7 +35,7 @@ Generator.prototype.createFiles = function createFiles(args) {
 
   // write content
   var path = args._path + '.css';
-  this.dest.write(path, source);
+  this.fs.write(path, source);
 };
 
 function isValid(name) {
@@ -43,7 +43,7 @@ function isValid(name) {
 }
 
 function toSource(obj) {
-    return obj.toString() + '\n';
+  return obj.toString() + '\n';
 }
 
 // [https://github.com/postcss/postcss/blob/master/docs/api.md]

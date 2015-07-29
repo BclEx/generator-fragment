@@ -35,7 +35,7 @@
     "knex": "~0.8.6",
     "lodash": "~3.9.3",
     "postcss": "^4.1.11",
-    "yeoman-generator": "~0.16.0",
+    "yeoman-generator": "^0.20.2",
     "yosay": "^0.1.0"
   },
   "devDependencies": {

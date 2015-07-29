@@ -5,9 +5,8 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment generator load test', function () {
-
-  it('can be imported without blowing up', function () {
+describe('load test.', function () {
+  it('can be imported without blowing up.', function () {
     assert(require('../app') !== undefined);
     assert(require('../css') !== undefined);
     assert(require('../html') !== undefined);
@@ -22,25 +21,25 @@ describe('fragment generator load test', function () {
     'skip-message': true
   };
 
-  describe('load context by name', function () {
+  describe('load context by name.', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
         fs.writeFileSync(path.join(__dirname, '../tmp', 'name-x.json'),
-"{\
+          "{\
 	key: 'value0',\
 	func: function () { return 'value1'; } \
 }", 'utf8');
         fragment = helpers.createGenerator('fragment:app', [
-           '../app'
+          '../app'
         ], ['name-x'], genOptions);
         done();
       });
     });
-    it('can be loaded by name', function (done) {
-      fragment.run({}, function () {
+    it('can be loaded by name.', function (done) {
+      fragment.run(function () {
         assert(this.options.args.key == 'value0');
         assert(this.options.args.func() == 'value1');
         done();
@@ -48,14 +47,14 @@ describe('fragment generator load test', function () {
     });
   });
 
-  describe('load context by name as object', function () {
+  describe('load context by name as object.', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
         fragment = helpers.createGenerator('fragment:app', [
-           '../app'
+          '../app'
         ], [{
           key: 'value0',
           func: function () { return 'value1'; }
@@ -63,8 +62,8 @@ describe('fragment generator load test', function () {
         done();
       });
     });
-    it('can be loaded by name as object', function (done) {
-      fragment.run({}, function () {
+    it('can be loaded by name as object.', function (done) {
+      fragment.run(function () {
         assert(this.options.args.key == 'value0');
         assert(this.options.args.func() == 'value1');
         done();
@@ -72,24 +71,24 @@ describe('fragment generator load test', function () {
     });
   });
 
-  describe('load context by arguments', function () {
+  describe('load context by arguments.', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
         fragment = helpers.createGenerator('fragment:app', [
-           '../app'
-        ], [null], genOptions);
+          '../app'
+        ], [], genOptions);
         done();
       });
     });
-    it('can be loaded by arguments', function (done) {
+    it('can be loaded by arguments.', function (done) {
       fragment.options.args = {
         key: 'value0',
         func: function () { return 'value1'; }
       };
-      fragment.run({}, function () {
+      fragment.run(function () {
         assert(this.options.args.key == 'value0');
         assert(this.options.args.func() == 'value1');
         done();

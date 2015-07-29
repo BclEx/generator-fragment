@@ -5,7 +5,7 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment:sql generator tests', function () {
+describe('fragment:sql generator tests.', function () {
 
   var fragment, genOptions = {
     'appPath': 'app',
@@ -14,19 +14,19 @@ describe('fragment:sql generator tests', function () {
     'skip-message': true
   };
 
-  describe('sql endpoints reached', function () {
+  describe('sql endpoints reached.', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
         fragment = helpers.createGenerator('fragment:sql', [
-           '../sql'
-        ], [null], genOptions);
+          '../sql'
+        ], [], genOptions);
         done();
       });
     });
-    it('can have methods and properties intermixed', function (done) {
+    it('can have methods and properties intermixed.', function (done) {
       fragment.options.args = {
         _path: 'name0',
         client: 'pg',
@@ -44,7 +44,7 @@ describe('fragment:sql generator tests', function () {
             { timestamps: null }]
         }
       };
-      fragment.run({}, function () {
+      fragment.run(function () {
         assert.file(['../tmp/name0.sql']);
         assert.fileContent('../tmp/name0.sql', /create/);
         done();
@@ -52,19 +52,19 @@ describe('fragment:sql generator tests', function () {
     });
   });
 
-  describe('sql knex map', function () {
+  describe('sql knex map.', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
           done(err);
         }
         fragment = helpers.createGenerator('fragment:sql', [
-           '../sql'
-        ], [null], genOptions);
+          '../sql'
+        ], [], genOptions);
         done();
       });
     });
-    it('test', function (done) {
+    it('test.', function (done) {
       fragment.options.args = {
         _path: 'name0',
         client: 'pg',
@@ -83,7 +83,7 @@ describe('fragment:sql generator tests', function () {
         },
         raw0: { raw: 'raw0' }
       };
-      fragment.run({}, function () {
+      fragment.run(function () {
         assert.file(['../tmp/name0.sql']);
         assert.fileContent('../tmp/name0.sql', /create/);
         done();

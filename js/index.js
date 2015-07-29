@@ -35,7 +35,7 @@ Generator.prototype.createFiles = function createFiles(args) {
 
   // write content
   var path = args._path + '.js';
-  this.dest.write(path, source);
+  this.fs.write(path, source);
 };
 
 function isValid(name) {

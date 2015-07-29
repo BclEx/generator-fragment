@@ -5,7 +5,7 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment:app generator tests', function () {
+describe('fragment:app generator tests.', function () {
 
   var fragment, genOptions = {
     'appPath': 'app',
@@ -14,7 +14,7 @@ describe('fragment:app generator tests', function () {
     'skip-message': true
   };
 
-  describe('app endpoints reached', function () {
+  describe('app endpoints reached.', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
@@ -26,7 +26,7 @@ describe('fragment:app generator tests', function () {
         done();
       });
     });
-    it('can have methods and properties intermixed', function (done) {
+    it('can have methods and properties intermixed.', function (done) {
       fragment.options.args = {
         sql: {
           _path: 'name0',
@@ -39,7 +39,7 @@ describe('fragment:app generator tests', function () {
           }]
         },
       };
-      fragment.run({}, function () {
+      fragment.run(function () {
          // assert.file(['../tmp/name0.css', '../tmp/name0.sql']);
         // assert.fileContent('../tmp/name0.css', /create/);
         done();
