@@ -5,7 +5,7 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment:css generator tests.', function () {
+describe('fragment:css generator tests', function () {
 
   var fragment, genOptions = {
     'appPath': 'app',
@@ -14,7 +14,7 @@ describe('fragment:css generator tests.', function () {
     'skip-message': true
   };
 
-  describe('css endpoints reached.', function () {
+  describe('css endpoints reached', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {

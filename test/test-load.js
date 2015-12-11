@@ -5,13 +5,14 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('load test.', function () {
+describe('load test', function () {
   it('can be imported without blowing up.', function () {
     assert(require('../app') !== undefined);
     assert(require('../css') !== undefined);
     assert(require('../html') !== undefined);
     assert(require('../js') !== undefined);
     assert(require('../sql') !== undefined);
+    assert(require('../mssql') !== undefined);
   });
 
   var fragment, genOptions = {
@@ -21,7 +22,7 @@ describe('load test.', function () {
     'skip-message': true
   };
 
-  describe('load context by name.', function () {
+  describe('load context by name', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
@@ -38,7 +39,7 @@ describe('load test.', function () {
         done();
       });
     });
-    it('can be loaded by name.', function (done) {
+    it('can be loaded by name', function (done) {
       fragment.run(function () {
         assert(this.options.ctx.key == 'value0');
         assert(this.options.ctx.func() == 'value1');
@@ -47,7 +48,7 @@ describe('load test.', function () {
     });
   });
 
-  describe('load context by name as object.', function () {
+  describe('load context by name as object', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
@@ -62,7 +63,7 @@ describe('load test.', function () {
         done();
       });
     });
-    it('can be loaded by name as object.', function (done) {
+    it('can be loaded by name as object', function (done) {
       fragment.run(function () {
         assert(this.options.ctx.key == 'value0');
         assert(this.options.ctx.func() == 'value1');
@@ -71,7 +72,7 @@ describe('load test.', function () {
     });
   });
 
-  describe('load context by arguments.', function () {
+  describe('load context by arguments', function () {
     before(function (done) {
       helpers.testDirectory(path.join(__dirname, '../tmp'), function (err) {
         if (err) {
@@ -83,7 +84,7 @@ describe('load test.', function () {
         done();
       });
     });
-    it('can be loaded by arguments.', function (done) {
+    it('can be loaded by arguments', function (done) {
       fragment.options.ctx = {
         key: 'value0',
         func: function () { return 'value1'; }

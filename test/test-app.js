@@ -5,7 +5,7 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 
-describe('fragment:app generator tests.', function () {
+describe('fragment:app generator tests', function () {
 
   var fragment, genOptions = {
     'appPath': 'app',
@@ -21,8 +21,8 @@ describe('fragment:app generator tests.', function () {
           done(err);
         }
         fragment = helpers.createGenerator('fragment:app', [
-           '../app', '../css', '../html', '../js', '../sql'
-        ], [null], genOptions);
+           '../app', '../css', '../html', '../js', '../sql', '../sql'
+        ], [], genOptions);
         done();
       });
     });

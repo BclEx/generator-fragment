@@ -11,6 +11,7 @@
 // External libs.
 var util = require('util');
 var scriptBase = require('../script-base.js');
+var debug = require('debug')('generator:fragment');
 var chalk = require('chalk');
 var postcss = require('postcss');
 

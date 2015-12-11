@@ -11,12 +11,10 @@
 // External libs.
 var util = require('util');
 var scriptBase = require('../script-base.js');
+var debug = require('debug')('generator:fragment');
 var chalk = require('chalk');
 var knex = require('knex');
 var _ = require('lodash');
-//global.req = require; // Used by mssql
-//var knex_mssql = require('../_knex-mssql');
-//knexFunc.Client = '../_knex-mssql/mssql'; // Add client to Knex
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
@@ -25,45 +23,30 @@ var Generator = module.exports = function Generator() {
 util.inherits(Generator, scriptBase);
 
 Generator.prototype.createFiles = function createFiles() {
-  this.log(chalk.green('Building sql...'));
+  debug('Building sql');
   var ctx = this.options.ctx;
-  ctx.client = ctx.client || 'mysql';
+  ctx._client = ctx._client || 'mssql';
 
   // build content
   var source;
-  if (ctx.client == 'mssql') {
-    source = this.generateSource(ctx, isValid, toSource, mssqlMap, null);
-  } else {
-    var $ = null;
-    try {
-      $ = knex({ client: ctx.client });
-    } catch (e) { this.log(chalk.bold(e)); return; }
-    source = this.generateSource(ctx, isValid, toSource, knexMap, $);
-  }
-  this.log(source);
+  try {
+    var $ = knex({ client: ctx._client });
+    source = this.generateSource(ctx, isValid, toSource, knexMap.bind(this), $);
+  } catch (e) { this.log(chalk.bold(e)); return; }
 
   // write content
-  var path = ctx._path + '.sql';
+  var path = ctx._file;
+  debug(path, source);
   this.fs.write(path, source);
 };
 
 function isValid(name) {
-  return name.charAt(0) !== '_' && name != 'client' && name !== 'constructor';
+  return name.charAt(0) !== '_' && name !== 'constructor';
 }
 
 function toSource(obj) {
     return obj.toString() + '\n';
 }
-
-function mssqlMap() {
-  // args.forEach(function (prop) {
-  //   if (prop.createTable) {
-  //     return k.schema.createTable(prop.tableName, null);
-  //   } else {
-  //     this.log(chalk.red('ERR! { field.propName: not defined }')); return null;
-  //   }
-  // });
-};
 
 // [http://knexjs.org/]
 function knexMap(prop, args, p) {
@@ -77,13 +60,13 @@ function knexMap(prop, args, p) {
   else if (prop.hasOwnProperty('dropTableIfExists')) return p.schema.dropTableIfExists(prop.dropTableIfExists);
   else if (prop.hasOwnProperty('table')) return p.schema.table(prop.table, cb);
   else if (prop.hasOwnProperty('raw')) return p.schema.raw(prop.raw);
-  else this.log(chalk.red('ERR! ' + JSON.stringify(prop) + ' not defined'));
+  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
   return null;
 };
 
 function knexSchemaBuildingMap(element, args, t) {
   if (!element.t) {
-    this.log(chalk.red('ERR! { t: not defined }'));
+    this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined' ));
     return;
   }
   _.forEach(element.t, function (prop) {
@@ -103,7 +86,7 @@ function knexSchemaBuildingMap(element, args, t) {
     else if (prop.hasOwnProperty('decimal')) c(t.decimal(prop.decimal.name, prop.decimal.precision, prop.decimal.scale));
     else if (prop.hasOwnProperty('boolean')) c(t.boolean(prop.boolean.name));
     else if (prop.hasOwnProperty('date')) c(t.date(prop.date.name));
-    else if (prop.hasOwnProperty('dateTime')) c(t.dateTime(prop.dateTime.name));
+    else if (prop.hasOwnProperty('datetime')) c(t.datetime(prop.datetime.name));
     else if (prop.hasOwnProperty('time')) c(t.time(prop.time.name));
     else if (prop.hasOwnProperty('timestamp')) c(t.timestamp(prop.timestamp.name, prop.timestamp.standard));
     else if (prop.hasOwnProperty('timestamps')) c(t.timestamps());
@@ -124,7 +107,7 @@ function knexSchemaBuildingMap(element, args, t) {
       if (element.createTable && args.client == 'mysql') c(t.collate(prop.collate));
       else this.log(chalk.red('only available within a createTable call, and only applicable to MySQL.'));
     } else if (prop.specificType) c(t.specificType(prop.specificType.name, prop.specificType.value));
-    else this.log(chalk.red('ERR! ' + JSON.stringify(prop) + ' not defined'));
+    else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
   }.bind(this));
 };
 
