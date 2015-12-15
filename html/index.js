@@ -17,25 +17,28 @@ var cheerio = require('cheerio');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
+	var done = this.async();
+	this.on('end', function () {
+		done();
+	});
 };
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function createFiles(ctx) {
-  this.log(chalk.green('Building html...'));
+Generator.prototype.createFiles = function createFiles() {
+  debug('Building html');
   var ctx = this.options.ctx;
 
   // build content
   var source;
-  var $ = null;
   try {
-    $ = cheerio.load('<html></html>');
+    var $ = cheerio.load('');
+    source = this.generateSource(ctx, isValid, toSource, cheerioMap.bind(this), $);
   } catch (e) { this.log(chalk.bold(e)); return; }
-  source = this.generateSource(ctx, isValid, toSource, cheerioMap, $);
-  this.log(source);
-
+  
   // write content
-  var path = ctx._path + '.html';
+  var path = ctx._file;
+  debug(path, source);
   this.fs.write(path, source);
 };
 
@@ -44,16 +47,9 @@ function isValid(name) {
 }
 
 function toSource(obj) {
-    return obj.html() + '\n';
+  return obj.html() + '\n';
 }
 
 // [https://github.com/cheeriojs/cheerio]
 function cheerioMap(prop, args, p) {
-  if (prop.hasOwnProperty('root')) return p.root(prop.root);
-  else if (prop.hasOwnProperty('atRule')) return p.atRule(prop.atRule);
-  else if (prop.hasOwnProperty('rule')) return p.rule(prop.rule);
-  else if (prop.hasOwnProperty('decl')) return p.decl(prop.decl);
-  else if (prop.hasOwnProperty('comment')) return p.comment(prop.comment);
-  else this.log(chalk.red('ERR! ' + JSON.stringify(prop) + ' not defined'));
-  return null;
 };

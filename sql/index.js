@@ -18,6 +18,10 @@ var _ = require('lodash');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
+	var done = this.async();
+	this.on('end', function () {
+		done();
+	});
 };
 
 util.inherits(Generator, scriptBase);
@@ -30,7 +34,7 @@ Generator.prototype.createFiles = function createFiles() {
   // build content
   var source;
   try {
-    var $ = knex({ client: ctx._client });
+    var $ = knex({ client: ctx._client, formatting: true });
     source = this.generateSource(ctx, isValid, toSource, knexMap.bind(this), $);
   } catch (e) { this.log(chalk.bold(e)); return; }
 

@@ -17,25 +17,28 @@ var postcss = require('postcss');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
+	var done = this.async();
+	this.on('end', function () {
+		done();
+	});
 };
 
 util.inherits(Generator, scriptBase);
 
 Generator.prototype.createFiles = function createFiles() {
-  this.log(chalk.green('Building css...'));
+  debug('Building css');
   var ctx = this.options.ctx;
 
   // build content
   var source;
-  // var $ = null;
-  // try {
-  //   $ = postcss();
-  // } catch (e) { this.log(chalk.bold(e)); return; }
-  source = this.generateSource(ctx, isValid, toSource, postCssMap, postcss);
-  this.log(source);
+  try {
+    var $ = postcss();
+    source = this.generateSource(ctx, isValid, toSource, postCssMap.bind(this), $);
+  } catch (e) { this.log(chalk.bold(e)); return; }
 
   // write content
-  var path = ctx._path + '.css';
+  var path = ctx._file;
+  debug(path, source);
   this.fs.write(path, source);
 };
 

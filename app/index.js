@@ -16,26 +16,26 @@ var chalk = require('chalk');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
-
+  var done = this.async();
   this.on('end', function () {
-    this.log(chalk.green('Building app...'));
-    if (this.options.ctx.css) {
-      this.composeWith('fragment:css', { ctx: [this.options.ctx.css] });
-    }
-    if (this.options.ctx.html) {
-      this.composeWith('fragment:html', { ctx: [this.options.ctx.html] });
-    }
-    if (this.options.ctx.js) {
-      this.composeWith('fragment:js', { ctx: [this.options.ctx.js] });
-    }
-    if (this.options.ctx.sql) {
-      this.composeWith('fragment:sql', { ctx: [this.options.ctx.sql] });
-    }
+    done();
   });
-
 };
 
 util.inherits(Generator, scriptBase);
 
 Generator.prototype.dummy = function dummy(args) {
+  debug('Building app');
+  if (this.options.ctx.css) {
+    this.composeWith('fragment:css', { ctx: [this.options.ctx.css] });
+  }
+  if (this.options.ctx.html) {
+    this.composeWith('fragment:html', { ctx: [this.options.ctx.html] });
+  }
+  if (this.options.ctx.js) {
+    this.composeWith('fragment:js', { ctx: [this.options.ctx.js] });
+  }
+  if (this.options.ctx.sql) {
+    this.composeWith('fragment:sql', { ctx: [this.options.ctx.sql] });
+  }
 };

@@ -17,6 +17,10 @@ var program = require('ast-query');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
+	var done = this.async();
+	this.on('end', function () {
+		done();
+	});
 };
 
 util.inherits(Generator, scriptBase);
