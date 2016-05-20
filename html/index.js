@@ -17,10 +17,10 @@ var cheerio = require('cheerio');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
-	var done = this.async();
-	this.on('end', function () {
-		done();
-	});
+  var done = this.async();
+  this.on('end', function () {
+    done();
+  });
 };
 
 util.inherits(Generator, scriptBase);
@@ -32,10 +32,10 @@ Generator.prototype.createFiles = function createFiles() {
   // build content
   var source;
   try {
-    var $ = cheerio.load('');
+    var $ = cheerio.load('<html />');
     source = this.generateSource(ctx, isValid, toSource, cheerioMap.bind(this), $);
   } catch (e) { this.log(chalk.bold(e)); return; }
-  
+
   // write content
   var path = ctx._file;
   debug(path, source);
@@ -51,5 +51,16 @@ function toSource(obj) {
 }
 
 // [https://github.com/cheeriojs/cheerio]
-function cheerioMap(prop, args, p) {
+function cheerioMap(prop, args, $) {
+  if (prop.hasOwnProperty('append')) return append(prop.append, 'html', $);
+  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
+  return null;
 };
+
+
+function append(objs, selector, $) {
+  objs.forEach(function (method) {
+    method(selector, $);
+  });
+  return $;
+}
