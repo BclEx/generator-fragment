@@ -28,6 +28,11 @@ util.inherits(Generator, scriptBase);
 Generator.prototype.createFiles = function createFiles() {
   debug('Building html');
   var ctx = this.options.ctx;
+  buildContent.call(this, ctx, ctx);
+};
+
+function buildContent(ctx, parentCtx) {
+  ctx._client = ctx._client || parentCtx._client;
 
   // build content
   var source;
@@ -40,6 +45,14 @@ Generator.prototype.createFiles = function createFiles() {
   var path = ctx._file;
   debug(path, source);
   this.fs.write(path, source);
+
+  // call children
+  var self = this;
+  if (ctx.hasOwnProperty('_children')) {
+    _.forEach(ctx._children, function (childCtx) {
+      buildContent.call(self, childCtx, parentCtx);
+    });
+  }
 };
 
 function isValid(name) {

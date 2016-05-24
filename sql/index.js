@@ -18,10 +18,10 @@ var _ = require('lodash');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
-	var done = this.async();
-	this.on('end', function () {
-		done();
-	});
+  var done = this.async();
+  this.on('end', function () {
+    done();
+  });
 };
 
 util.inherits(Generator, scriptBase);
@@ -30,6 +30,11 @@ Generator.prototype.createFiles = function createFiles() {
   debug('Building sql');
   var ctx = this.options.ctx;
   ctx._client = ctx._client || 'mssql';
+  buildContent.call(this, ctx, ctx);
+};
+
+function buildContent(ctx, parentCtx) {
+  ctx._client = ctx._client || parentCtx._client;
 
   // build content
   var source;
@@ -42,6 +47,14 @@ Generator.prototype.createFiles = function createFiles() {
   var path = ctx._file;
   debug(path, source);
   this.fs.write(path, source);
+
+  // call children
+  var self = this;
+  if (ctx.hasOwnProperty('_children')) {
+    _.forEach(ctx._children, function (childCtx) {
+      buildContent.call(self, childCtx, parentCtx);
+    });
+  }
 };
 
 function isValid(name) {
@@ -49,7 +62,7 @@ function isValid(name) {
 }
 
 function toSource(obj) {
-    return obj.toString() + '\n';
+  return obj.toString() + '\n';
 }
 
 // [http://knexjs.org/]
@@ -58,11 +71,12 @@ function knexMap(prop, args, p) {
   var cb = function (table) {
     return knexSchemaBuildingMap.call(self, prop, args, table);
   };
-  if (prop.hasOwnProperty('createTable')) return p.schema.createTable(prop.createTable, cb);
+  var schemaName = prop.schemaName || '';
+  if (prop.hasOwnProperty('createTable')) return p.schema.withSchema(schemaName).createTable(prop.createTable, cb);
   else if (prop.hasOwnProperty('renameTable')) return p.schema.renameTable(prop.renameTable.from, prop.renameTable.to);
-  else if (prop.hasOwnProperty('dropTable')) return p.schema.dropTable(prop.dropTable);
-  else if (prop.hasOwnProperty('dropTableIfExists')) return p.schema.dropTableIfExists(prop.dropTableIfExists);
-  else if (prop.hasOwnProperty('table')) return p.schema.table(prop.table, cb);
+  else if (prop.hasOwnProperty('dropTable')) return p.schema.withSchema(schemaName).dropTable(prop.dropTable);
+  else if (prop.hasOwnProperty('dropTableIfExists')) return p.schema.withSchema(schemaName).dropTableIfExists(prop.dropTableIfExists);
+  else if (prop.hasOwnProperty('table')) return p.schema.withSchema(schemaName).table(prop.table, cb);
   else if (prop.hasOwnProperty('raw')) return p.schema.raw(prop.raw);
   else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
   return null;
@@ -70,7 +84,7 @@ function knexMap(prop, args, p) {
 
 function knexSchemaBuildingMap(element, args, t) {
   if (!element.t) {
-    this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined' ));
+    this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined'));
     return;
   }
   _.forEach(element.t, function (prop) {
@@ -111,6 +125,9 @@ function knexSchemaBuildingMap(element, args, t) {
       if (element.createTable && args.client == 'mysql') c(t.collate(prop.collate));
       else this.log(chalk.red('only available within a createTable call, and only applicable to MySQL.'));
     } else if (prop.specificType) c(t.specificType(prop.specificType.name, prop.specificType.value));
+    //
+    else if (prop.hasOwnProperty('primary')) t.primary(prop.primary);
+    else if (prop.hasOwnProperty('unique')) t.unique(prop.unique);
     else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
   }.bind(this));
 };
@@ -119,7 +136,7 @@ function knexChainableMap(prop, c) {
   if (prop.hasOwnProperty('index')) c = c.index(prop.index.indexName, prop.index.indexType);
   if (prop.hasOwnProperty('primary')) c = c.primary();
   if (prop.hasOwnProperty('unique')) c = c.unique();
-  if (prop.hasOwnProperty('references')) c = c.references(prop.references);
+  if (prop.hasOwnProperty('references')) c = c.references(prop.references).on(prop.on);
   if (prop.hasOwnProperty('inTable')) c = c.inTable(prop.inTable);
   if (prop.hasOwnProperty('onDelete')) c = c.onDelete(prop.onDelete);
   if (prop.hasOwnProperty('onUpdate')) c = c.onUpdate(prop.onUpdate);

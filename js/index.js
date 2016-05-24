@@ -17,10 +17,10 @@ var program = require('ast-query');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
-	var done = this.async();
-	this.on('end', function () {
-		done();
-	});
+  var done = this.async();
+  this.on('end', function () {
+    done();
+  });
 };
 
 util.inherits(Generator, scriptBase);
@@ -28,6 +28,11 @@ util.inherits(Generator, scriptBase);
 Generator.prototype.createFiles = function createFiles() {
   this.log(chalk.green('Building js...'));
   var ctx = this.options.ctx;
+  buildContent.call(this, ctx, ctx);
+};
+
+function buildContent(ctx, parentCtx) {
+  ctx._client = ctx._client || parentCtx._client;
 
   // build content
   var source;
@@ -41,6 +46,14 @@ Generator.prototype.createFiles = function createFiles() {
   // write content
   var path = ctx._path + '.js';
   this.fs.write(path, source);
+
+  // call children
+  var self = this;
+  if (ctx.hasOwnProperty('_children')) {
+    _.forEach(ctx._children, function (childCtx) {
+      buildContent.call(self, childCtx, parentCtx);
+    });
+  }
 };
 
 function isValid(name) {
@@ -48,7 +61,7 @@ function isValid(name) {
 }
 
 function toSource(obj) {
-    return obj.toString() + '\n';
+  return obj.toString() + '\n';
 }
 
 // [https://github.com/SBoudrias/AST-query]
