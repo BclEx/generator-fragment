@@ -67,7 +67,6 @@ function appName (self) {
   return suffix ? self._.classify(suffix) : '';
 }
 
-
 module.exports = {
   rewrite: rewrite,
   rewriteFile: rewriteFile,

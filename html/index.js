@@ -13,7 +13,7 @@ var util = require('util');
 var scriptBase = require('../script-base.js');
 var debug = require('debug')('generator:fragment');
 var chalk = require('chalk');
-var cheerio = require('cheerio');
+var cheerio = require('cheerio'); // [https://github.com/cheeriojs/cheerio]
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
@@ -63,13 +63,11 @@ function toSource(obj) {
   return obj.html() + '\n';
 }
 
-// [https://github.com/cheeriojs/cheerio]
 function cheerioMap(prop, args, $) {
   if (prop.hasOwnProperty('append')) return append(prop.append, 'html', $);
   else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
   return null;
 };
-
 
 function append(objs, selector, $) {
   objs.forEach(function (method) {
