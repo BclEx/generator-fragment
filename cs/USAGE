@@ -1,0 +1,8 @@
+Description:
+    Creates a new javascript fragment.
+
+Example:
+    yo fragment:js thing
+
+    This will create:
+        ./thing.js

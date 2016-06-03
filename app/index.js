@@ -26,6 +26,9 @@ util.inherits(Generator, scriptBase);
 
 Generator.prototype.dummy = function dummy(args) {
   debug('Building app');
+  if (this.options.ctx.cs) {
+    this.composeWith('fragment:cs', { ctx: [this.options.ctx.cs] });
+  }
   if (this.options.ctx.css) {
     this.composeWith('fragment:css', { ctx: [this.options.ctx.css] });
   }
