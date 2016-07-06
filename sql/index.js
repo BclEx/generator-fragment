@@ -66,23 +66,28 @@ function toSource(obj) {
 }
 
 // [http://knexjs.org/]
-function knexMap(prop, args, p) {
+function knexMap(prop, args, $) {
   var self = this;
   var cb = function (table) {
-    return knexSchemaBuildingMap.call(self, prop, args, table);
+    return knexSchemaMap.call(self, prop, args, table);
   };
+  var cv = function (t, $) {
+    return t.call(self, $);
+  }
   var schemaName = prop.schemaName || '';
-  if (prop.hasOwnProperty('createTable')) return p.schema.withSchema(schemaName).createTable(prop.createTable, cb);
-  else if (prop.hasOwnProperty('renameTable')) return p.schema.renameTable(prop.renameTable.from, prop.renameTable.to);
-  else if (prop.hasOwnProperty('dropTable')) return p.schema.withSchema(schemaName).dropTable(prop.dropTable);
-  else if (prop.hasOwnProperty('dropTableIfExists')) return p.schema.withSchema(schemaName).dropTableIfExists(prop.dropTableIfExists);
-  else if (prop.hasOwnProperty('table')) return p.schema.withSchema(schemaName).table(prop.table, cb);
-  else if (prop.hasOwnProperty('raw')) return p.schema.raw(prop.raw);
+  if (prop.hasOwnProperty('createTable')) return $.schema.withSchema(schemaName).createTable(prop.createTable, cb);
+  else if (prop.hasOwnProperty('renameTable')) return $.schema.renameTable(prop.renameTable.from, prop.renameTable.to);
+  else if (prop.hasOwnProperty('dropTable')) return $.schema.withSchema(schemaName).dropTable(prop.dropTable);
+  else if (prop.hasOwnProperty('dropTableIfExists')) return $.schema.withSchema(schemaName).dropTableIfExists(prop.dropTableIfExists);
+  else if (prop.hasOwnProperty('table')) return $.schema.withSchema(schemaName).table(prop.table, cb);
+  else if (prop.hasOwnProperty('raw')) return $.schema.raw(prop.raw);
+  else if (prop.hasOwnProperty('createView')) { return $.schema.raw('CREATE VIEW ?? \nAS ' + prop.t.call(self, $), [schemaName + '.' + prop.createView]); }
+  // else if (prop.hasOwnProperty('createView')) { return $.schema.raw('CREATE VIEW ?? AS (\n' + cv() + '\n)', [prop.createView]); }
   else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
   return null;
 };
 
-function knexSchemaBuildingMap(element, args, t) {
+function knexSchemaMap(element, args, t) {
   if (!element.t) {
     this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined'));
     return;

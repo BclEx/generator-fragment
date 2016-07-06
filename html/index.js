@@ -32,8 +32,6 @@ Generator.prototype.createFiles = function createFiles() {
 };
 
 function buildContent(ctx, parentCtx) {
-  ctx._client = ctx._client || parentCtx._client;
-
   // build content
   var source;
   try {

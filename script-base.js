@@ -33,7 +33,7 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, yeoman.generators.NamedBase);
 
-Generator.prototype.generateSource = function (args, isValid, toSource, propMethod, methodArgs) {
+Generator.prototype.generateSource = function (args, isValid, toSource, propMethod, $) {
   var props = Object.getOwnPropertyNames(args);
   var validProps = props.filter(isValid);
   assert(validProps.length, 'This Context is empty. Add at least one method for it to run.');
@@ -41,13 +41,13 @@ Generator.prototype.generateSource = function (args, isValid, toSource, propMeth
   var source = '';
   function parseNode(item) {
     if (_.isFunction(item)) {
-      source += toSource(item.call(this, args, methodArgs));
+      source += toSource(item.call(this, args, $), $);
     } else if (_.isArray(item)) {
       _.forEach(item, function (subItem) {
         parseNode(subItem);
       });
     } else if (_.isObject(item)) {
-      source += toSource(propMethod.call(this, item, args, methodArgs));
+      source += toSource(propMethod.call(this, item, args, $), $);
     }
   }
 

@@ -14,7 +14,7 @@ describe('fragment:sc test', function () {
     'skip-message': true
   };
 
-  describe('js endpoints reached', function () {
+  describe('cs endpoints reached', function () {
     before(function (done) {
       var deps = [
         '../cs'
@@ -29,17 +29,23 @@ describe('fragment:sc test', function () {
     });
     it('can have methods and properties intermixed', function (done) {
       fragment.options.ctx = {
-        _path: 'name0',
+        _file: 'name0.cs',
         build0: function (args, $) {
-          return $;
+          return $.schema.createClass('createClass0', function (c) {
+            c.string('Name').attribute({ DisplayName: 'DisplayName' });
+            c.dateTime('Date');
+          });
         },
-        _build1: [
-          { rule: { selector: '[data-heading="1"]' } }
-        ]
+        build1: {
+          schemaName: 'CORE',
+          createClass: 'createClass1', t: [
+            { string: 'Name', attribute: { DisplayName: 'DisplayName' } },
+            { dateTime: 'Date' }]
+        }
       };
       fragment.run(function () {
-        assert.file(['../tmp/name0.js']);
-        // assert.fileContent('../tmp/name0.js', /create/);
+        assert.file(['../tmp/name0.cs']);
+        // assert.fileContent('../tmp/name0.cs', /create/);
         done();
       }.bind(fragment));
     });
