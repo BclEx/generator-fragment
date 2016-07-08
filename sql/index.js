@@ -66,24 +66,23 @@ function toSource(obj) {
 }
 
 // [http://knexjs.org/]
-function knexMap(prop, args, $) {
+function knexMap(x, args, $) {
   var self = this;
   var cb = function (table) {
-    return knexSchemaMap.call(self, prop, args, table);
+    return knexSchemaMap.call(self, x, args, table);
   };
   var cv = function (t, $) {
     return t.call(self, $);
   }
-  var schemaName = prop.schemaName || '';
-  if (prop.hasOwnProperty('createTable')) return $.schema.withSchema(schemaName).createTable(prop.createTable, cb);
-  else if (prop.hasOwnProperty('renameTable')) return $.schema.renameTable(prop.renameTable.from, prop.renameTable.to);
-  else if (prop.hasOwnProperty('dropTable')) return $.schema.withSchema(schemaName).dropTable(prop.dropTable);
-  else if (prop.hasOwnProperty('dropTableIfExists')) return $.schema.withSchema(schemaName).dropTableIfExists(prop.dropTableIfExists);
-  else if (prop.hasOwnProperty('table')) return $.schema.withSchema(schemaName).table(prop.table, cb);
-  else if (prop.hasOwnProperty('raw')) return $.schema.raw(prop.raw);
-  else if (prop.hasOwnProperty('createView')) { return $.schema.raw('CREATE VIEW ?? \nAS ' + prop.t.call(self, $), [schemaName + '.' + prop.createView]); }
-  // else if (prop.hasOwnProperty('createView')) { return $.schema.raw('CREATE VIEW ?? AS (\n' + cv() + '\n)', [prop.createView]); }
-  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
+  var schemaName = x.schemaName || '';
+  if (x.hasOwnProperty('createTable')) return $.schema.withSchema(schemaName).createTable(x.createTable, cb);
+  else if (x.hasOwnProperty('renameTable')) return $.schema.renameTable(x.renameTable.from, x.renameTable.to);
+  else if (x.hasOwnProperty('dropTable')) return $.schema.withSchema(schemaName).dropTable(x.dropTable);
+  else if (x.hasOwnProperty('dropTableIfExists')) return $.schema.withSchema(schemaName).dropTableIfExists(x.dropTableIfExists);
+  else if (x.hasOwnProperty('table')) return $.schema.withSchema(schemaName).table(x.table, cb);
+  else if (x.hasOwnProperty('raw')) return $.schema.raw(x.raw);
+  else if (x.hasOwnProperty('createView')) { return $.schema.raw('CREATE VIEW ?? \nAS (\n' + x.t.call(self, $) + '\n)', [schemaName + '.' + x.createView]); }
+  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   return null;
 };
 
@@ -92,65 +91,73 @@ function knexSchemaMap(element, args, t) {
     this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined'));
     return;
   }
-  _.forEach(element.t, function (prop) {
+  _.forEach(element.t, function (x) {
     var self = this;
     var c = function (column) {
-      return knexChainableMap.call(self, prop, column);
+      return knexChainableMap.call(self, x, column);
     };
-    if (prop.hasOwnProperty('dropColumn')) c(t.dropColumn(prop.dropColumn));
-    else if (prop.hasOwnProperty('dropColumns')) c(t.dropColumns(prop.dropColumns));
-    else if (prop.hasOwnProperty('renameColumn')) c(t.renameColumn(prop.renameColumn.from, prop.renameColumn.to));
-    else if (prop.hasOwnProperty('increments')) c(t.increments(prop.increments));
-    else if (prop.hasOwnProperty('integer')) c(t.integer(prop.integer.name));
-    else if (prop.hasOwnProperty('bigInteger')) c(t.bigInteger(prop.bigInteger.name));
-    else if (prop.hasOwnProperty('text')) c(t.text(prop.text.name, prop.text.textType));
-    else if (prop.hasOwnProperty('string')) c(t.string(prop.string.name, prop.string.length));
-    else if (prop.hasOwnProperty('float')) c(t.float(prop.float.name, prop.float.precision, prop.float.scale));
-    else if (prop.hasOwnProperty('decimal')) c(t.decimal(prop.decimal.name, prop.decimal.precision, prop.decimal.scale));
-    else if (prop.hasOwnProperty('boolean')) c(t.boolean(prop.boolean.name));
-    else if (prop.hasOwnProperty('date')) c(t.date(prop.date.name));
-    else if (prop.hasOwnProperty('datetime')) c(t.datetime(prop.datetime.name));
-    else if (prop.hasOwnProperty('time')) c(t.time(prop.time.name));
-    else if (prop.hasOwnProperty('timestamp')) c(t.timestamp(prop.timestamp.name, prop.timestamp.standard));
-    else if (prop.hasOwnProperty('timestamps')) c(t.timestamps());
-    else if (prop.hasOwnProperty('binary')) c(t.binary(prop.binary.name, prop.binary.length));
-    else if (prop.hasOwnProperty('enu')) c(t.enu(prop.enu.name, prop.enu.values));
-    else if (prop.hasOwnProperty('json')) c(t.json(prop.json.name, prop.json.jsonb));
-    else if (prop.hasOwnProperty('uuid')) c(t.uuid(prop.uuid.name));
-    else if (prop.hasOwnProperty('comment')) c(t.comment(prop.comment));
-    else if (prop.hasOwnProperty('engine')) {
-      if (element.createTable && args.client == 'mysql') c(t.engine(prop.engine));
+    if (x.hasOwnProperty('dropColumn')) c(t.dropColumn(x.dropColumn));
+    else if (x.hasOwnProperty('dropColumns')) c(t.dropColumns(x.dropColumns));
+    else if (x.hasOwnProperty('renameColumn')) c(t.renameColumn(x.renameColumn.from, x.renameColumn.to));
+    else if (x.hasOwnProperty('increments')) c(t.increments(x.increments));
+    else if (x.hasOwnProperty('integer')) c(t.integer(x.integer.name));
+    else if (x.hasOwnProperty('bigInteger')) c(t.bigInteger(x.bigInteger.name));
+    else if (x.hasOwnProperty('text')) c(t.text(x.text.name, x.text.textType));
+    else if (x.hasOwnProperty('string')) c(t.string(x.string.name, x.string.length));
+    else if (x.hasOwnProperty('float')) c(t.float(x.float.name, x.float.precision, x.float.scale));
+    else if (x.hasOwnProperty('decimal')) c(t.decimal(x.decimal.name, x.decimal.precision, x.decimal.scale));
+    else if (x.hasOwnProperty('boolean')) c(t.boolean(x.boolean.name));
+    else if (x.hasOwnProperty('date')) c(t.date(x.date.name));
+    else if (x.hasOwnProperty('datetime')) c(t.datetime(x.datetime.name));
+    else if (x.hasOwnProperty('time')) c(t.time(x.time.name));
+    else if (x.hasOwnProperty('timestamp')) c(t.timestamp(x.timestamp.name, x.timestamp.standard));
+    else if (x.hasOwnProperty('timestamps')) c(t.timestamps());
+    else if (x.hasOwnProperty('binary')) c(t.binary(x.binary.name, x.binary.length));
+    else if (x.hasOwnProperty('enu')) c(t.enu(x.enu.name, x.enu.values));
+    else if (x.hasOwnProperty('json')) c(t.json(x.json.name, x.json.jsonb));
+    else if (x.hasOwnProperty('uuid')) c(t.uuid(x.uuid.name));
+    else if (x.hasOwnProperty('x')) c(t.specificType(x.x.name, x.x.type));
+    else if (x.hasOwnProperty('comment')) c(t.comment(x.comment));
+    else if (x.hasOwnProperty('engine')) {
+      if (element.createTable && args.client == 'mysql') c(t.engine(x.engine));
       else this.log(chalk.red('only available within a createTable call, and only applicable to MySQL.'));
     }
-    else if (prop.hasOwnProperty('charset')) {
-      if (element.createTable && args.client == 'mysql') c(t.charset(prop.charset));
+    else if (x.hasOwnProperty('charset')) {
+      if (element.createTable && args.client == 'mysql') c(t.charset(x.charset));
       else this.log(chalk.red('only available within a createTable call, and only applicable to MySQL.'));
     }
-    else if (prop.hasOwnProperty('collate')) {
-      if (element.createTable && args.client == 'mysql') c(t.collate(prop.collate));
+    else if (x.hasOwnProperty('collate')) {
+      if (element.createTable && args.client == 'mysql') c(t.collate(x.collate));
       else this.log(chalk.red('only available within a createTable call, and only applicable to MySQL.'));
-    } else if (prop.specificType) c(t.specificType(prop.specificType.name, prop.specificType.value));
-    //
-    else if (prop.hasOwnProperty('primary')) t.primary(prop.primary);
-    else if (prop.hasOwnProperty('unique')) t.unique(prop.unique);
-    else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
+    } else if (x.specificType) c(t.specificType(x.specificType.name, x.specificType.value));
+    // knex method
+    else if (x.hasOwnProperty('primary')) t.primary(x.primary);
+    else if (x.hasOwnProperty('unique')) t.unique(x.unique);
+    // custom
+    else if (x.hasOwnProperty('formula')) formula(t, x.formula.name, x.formula.sql, x.formula.persistant || false);
+    else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   }.bind(this));
 };
 
-function knexChainableMap(prop, c) {
-  if (prop.hasOwnProperty('index')) c = c.index(prop.index.indexName, prop.index.indexType);
-  if (prop.hasOwnProperty('primary')) c = c.primary();
-  if (prop.hasOwnProperty('unique')) c = c.unique();
-  if (prop.hasOwnProperty('references')) c = c.references(prop.references).on(prop.on);
-  if (prop.hasOwnProperty('inTable')) c = c.inTable(prop.inTable);
-  if (prop.hasOwnProperty('onDelete')) c = c.onDelete(prop.onDelete);
-  if (prop.hasOwnProperty('onUpdate')) c = c.onUpdate(prop.onUpdate);
-  if (prop.hasOwnProperty('defaultTo')) c = c.defaultTo(prop.defaultTo);
-  if (prop.hasOwnProperty('unsigned')) c = c.unsigned();
-  if (prop.hasOwnProperty('notNullable')) c = c.notNullable();
-  if (prop.hasOwnProperty('nullable')) c = c.nullable();
-  if (prop.hasOwnProperty('first')) c = c.first();
-  if (prop.hasOwnProperty('after')) c = c.after(prop.after);
-  if (prop.hasOwnProperty('comment')) c = c.comment(prop.comment);
+function knexChainableMap(x, c) {
+  if (x.hasOwnProperty('index')) c = c.index(x.index.indexName, x.index.indexType);
+  if (x.hasOwnProperty('primary')) c = c.primary();
+  if (x.hasOwnProperty('unique')) c = c.unique();
+  if (x.hasOwnProperty('references')) c = c.references(x.references).on(x.on);
+  if (x.hasOwnProperty('inTable')) c = c.inTable(x.inTable);
+  if (x.hasOwnProperty('onDelete')) c = c.onDelete(x.onDelete);
+  if (x.hasOwnProperty('onUpdate')) c = c.onUpdate(x.onUpdate);
+  if (x.hasOwnProperty('defaultTo')) c = c.defaultTo(x.defaultTo);
+  if (x.hasOwnProperty('unsigned')) c = c.unsigned();
+  if (x.hasOwnProperty('notNullable')) c = c.notNullable();
+  if (x.hasOwnProperty('nullable')) c = c.nullable();
+  if (x.hasOwnProperty('first')) c = c.first();
+  if (x.hasOwnProperty('after')) c = c.after(x.after);
+  if (x.hasOwnProperty('comment')) c = c.comment(x.comment);
   return c;
+}
+
+function formula(t, name, sql, persistant) {
+  var type = 'AS (' + sql + (persistant ? ') PERSISTED' : ')');
+  t.specificType(name, type)
 }

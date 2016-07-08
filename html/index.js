@@ -61,9 +61,9 @@ function toSource(obj) {
   return obj.html() + '\n';
 }
 
-function cheerioMap(prop, args, $) {
-  if (prop.hasOwnProperty('append')) return append(prop.append, 'html', $);
-  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
+function cheerioMap(x, args, $) {
+  if (x.hasOwnProperty('append')) return append(x.append, 'html', $);
+  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   return null;
 };
 

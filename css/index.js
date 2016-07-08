@@ -62,12 +62,12 @@ function toSource(obj) {
 }
 
 // [https://github.com/postcss/postcss/blob/master/docs/api.md]
-function postCssMap(prop, args, p) {
-  if (prop.hasOwnProperty('root')) return p.root(prop.root);
-  else if (prop.hasOwnProperty('atRule')) return p.atRule(prop.atRule);
-  else if (prop.hasOwnProperty('rule')) return p.rule(prop.rule);
-  else if (prop.hasOwnProperty('decl')) return p.decl(prop.decl);
-  else if (prop.hasOwnProperty('comment')) return p.comment(prop.comment);
-  else this.log(chalk.red('ERR! ' + JSON.stringify(prop) + ' not defined'));
+function postCssMap(x, args, p) {
+  if (x.hasOwnProperty('root')) return p.root(x.root);
+  else if (x.hasOwnProperty('atRule')) return p.atRule(x.atRule);
+  else if (x.hasOwnProperty('rule')) return p.rule(x.rule);
+  else if (x.hasOwnProperty('decl')) return p.decl(x.decl);
+  else if (x.hasOwnProperty('comment')) return p.comment(x.comment);
+  else this.log(chalk.red('ERR! ' + JSON.stringify(x) + ' not defined'));
   return null;
 };

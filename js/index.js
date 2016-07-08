@@ -64,9 +64,9 @@ function toSource(obj) {
   return obj.toString() + '\n';
 }
 
-function programMap(prop, args, $) {
-  if (prop.hasOwnProperty('append')) return append(prop.append, '', $);
-  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
+function programMap(x, args, $) {
+  if (x.hasOwnProperty('append')) return append(x.append, '', $);
+  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   return null;
 };
 

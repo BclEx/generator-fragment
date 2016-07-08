@@ -65,22 +65,22 @@ function toSource(obj, $) {
   return $.toString() + '\n';
 }
 
-function programMap(prop, args, $) {
+function programMap(x, args, $) {
   var self = this;
   var cb = function (table) {
-    return programClassMap.call(self, prop, args, table);
+    return programClassMap.call(self, x, args, table);
   };
-  var usings = prop.usings;
-  var schemaName = prop.schemaName || '';
-  if (prop.hasOwnProperty('append')) return append(prop.append, '', $);
-  else if (prop.hasOwnProperty('createClass')) return $.schema.addUsing(prop.usings).withSchema(schemaName).createClass(prop.createClass, cb);
-  else if (prop.hasOwnProperty('createClassIfNotExists')) return $.schema.addUsing(prop.usings).withSchema(schemaName).createClass(prop.createClassIfNotExists, cb);
-  else if (prop.hasOwnProperty('dropClass')) return $.schema.withSchema(schemaName).dropClass(prop.dropClass);
-  else if (prop.hasOwnProperty('dropClassIfExists')) return $.schema.withSchema(schemaName).dropClassIfExists(prop.dropClassIfExists);
-  else if (prop.hasOwnProperty('renameClass')) return $.schema.renameClass(prop.renameClass.from, prop.renameClass.to);
-  else if (prop.hasOwnProperty('class')) return $.schema.addUsing(prop.usings).withSchema(schemaName).class(prop.class, cb);
-  else if (prop.hasOwnProperty('raw')) return $.schema.raw(prop.raw);
-  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
+  var usings = x.usings;
+  var schemaName = x.schemaName || '';
+  if (x.hasOwnProperty('append')) return append(x.append, '', $);
+  else if (x.hasOwnProperty('createClass')) return $.schema.addUsing(x.usings).withSchema(schemaName).createClass(x.createClass, cb);
+  else if (x.hasOwnProperty('createClassIfNotExists')) return $.schema.addUsing(x.usings).withSchema(schemaName).createClass(x.createClassIfNotExists, cb);
+  else if (x.hasOwnProperty('dropClass')) return $.schema.withSchema(schemaName).dropClass(x.dropClass);
+  else if (x.hasOwnProperty('dropClassIfExists')) return $.schema.withSchema(schemaName).dropClassIfExists(x.dropClassIfExists);
+  else if (x.hasOwnProperty('renameClass')) return $.schema.renameClass(x.renameClass.from, x.renameClass.to);
+  else if (x.hasOwnProperty('class')) return $.schema.addUsing(x.usings).withSchema(schemaName).class(x.class, cb);
+  else if (x.hasOwnProperty('raw')) return $.schema.raw(x.raw);
+  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   return null;
 };
 
@@ -96,45 +96,45 @@ function programClassMap(element, args, t) {
     this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined'));
     return;
   }
-  _.forEach(element.t, function (prop) {
+  _.forEach(element.t, function (x) {
     var self = this;
     var c = function (column) {
-      return knexChainableMap.call(self, prop, column);
+      return knexChainableMap.call(self, x, column);
     };
-    if (prop.hasOwnProperty('dropMember')) c(t.dropMember(prop.dropMember));
-    else if (prop.hasOwnProperty('renameMember')) c(t.renameMember(prop.renameColumn.from, prop.renameColumn.to));
+    if (x.hasOwnProperty('dropMember')) c(t.dropMember(x.dropMember));
+    else if (x.hasOwnProperty('renameMember')) c(t.renameMember(x.renameColumn.from, x.renameColumn.to));
     // Numeric
-    else if (prop.hasOwnProperty('byte')) c(t.byte(prop.byte.name));
-    else if (prop.hasOwnProperty('sbyte')) c(t.sbyte(prop.sbyte.name));
-    else if (prop.hasOwnProperty('short')) c(t.short(prop.short.name));
-    else if (prop.hasOwnProperty('ushort')) c(t.ushort(prop.ushort.name));
-    else if (prop.hasOwnProperty('int')) c(t.int(prop.int.name));
-    else if (prop.hasOwnProperty('uint')) c(t.uint(prop.uint.name));
-    else if (prop.hasOwnProperty('long')) c(t.long(prop.long).name);
-    else if (prop.hasOwnProperty('ulong')) c(t.ulong(prop.ulong.name));
-    else if (prop.hasOwnProperty('single')) c(t.single(prop.single.name));
-    else if (prop.hasOwnProperty('float')) c(t.float(prop.float.name));
-    else if (prop.hasOwnProperty('decimal')) c(t.decimal(prop.decimal.name));
+    else if (x.hasOwnProperty('byte')) c(t.byte(x.byte.name));
+    else if (x.hasOwnProperty('sbyte')) c(t.sbyte(x.sbyte.name));
+    else if (x.hasOwnProperty('short')) c(t.short(x.short.name));
+    else if (x.hasOwnProperty('ushort')) c(t.ushort(x.ushort.name));
+    else if (x.hasOwnProperty('int')) c(t.int(x.int.name));
+    else if (x.hasOwnProperty('uint')) c(t.uint(x.uint.name));
+    else if (x.hasOwnProperty('long')) c(t.long(x.long).name);
+    else if (x.hasOwnProperty('ulong')) c(t.ulong(x.ulong.name));
+    else if (x.hasOwnProperty('single')) c(t.single(x.single.name));
+    else if (x.hasOwnProperty('float')) c(t.float(x.float.name));
+    else if (x.hasOwnProperty('decimal')) c(t.decimal(x.decimal.name));
     // String
-    else if (prop.hasOwnProperty('char')) c(t.char(prop.char.name));
-    else if (prop.hasOwnProperty('string')) c(t.string(prop.string.name));
+    else if (x.hasOwnProperty('char')) c(t.char(x.char.name));
+    else if (x.hasOwnProperty('string')) c(t.string(x.string.name));
     // Additional
-    else if (prop.hasOwnProperty('void')) c(t.void(prop.void.name));
-    else if (prop.hasOwnProperty('bool')) c(t.bool(prop.bool.name));
-    else if (prop.hasOwnProperty('dateTime')) c(t.dateTime(prop.dateTime.name));
-    else if (prop.hasOwnProperty('guid')) c(t.guid(prop.guid.name));
-    else if (prop.hasOwnProperty('x')) c(t.time(prop.x.name));
+    else if (x.hasOwnProperty('void')) c(t.void(x.void.name));
+    else if (x.hasOwnProperty('bool')) c(t.bool(x.bool.name));
+    else if (x.hasOwnProperty('dateTime')) c(t.dateTime(x.dateTime.name));
+    else if (x.hasOwnProperty('guid')) c(t.guid(x.guid.name));
+    else if (x.hasOwnProperty('x')) c(t.time(x.x.name));
     //
-    else if (prop.hasOwnProperty('method')) t.method(prop.method);
-    else if (prop.hasOwnProperty('dropMethod')) t.dropMethod(prop.dropMethod);
-    else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(prop)) + ' not defined'));
+    else if (x.hasOwnProperty('method')) t.method(x.method);
+    else if (x.hasOwnProperty('dropMethod')) t.dropMethod(x.dropMethod);
+    else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   }.bind(this));
 };
 
-function knexChainableMap(prop, c) {
-  if (prop.hasOwnProperty('defaultTo')) c = c.defaultTo(prop.defaultTo);
-  if (prop.hasOwnProperty('attribute')) c = c.attribute(prop.attribute);
-  if (prop.hasOwnProperty('array')) c = c.array(prop.array);
-  if (prop.hasOwnProperty('comment')) c = c.comment(prop.comment);
+function knexChainableMap(x, c) {
+  if (x.hasOwnProperty('defaultTo')) c = c.defaultTo(x.defaultTo);
+  if (x.hasOwnProperty('attribute')) c = c.attribute(x.attribute);
+  if (x.hasOwnProperty('array')) c = c.array(x.array);
+  if (x.hasOwnProperty('comment')) c = c.comment(x.comment);
   return c;
 }
