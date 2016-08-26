@@ -27,18 +27,18 @@ util.inherits(Generator, scriptBase);
 Generator.prototype.dummy = function dummy(args) {
   debug('Building app');
   if (this.options.ctx.cs) {
-    this.composeWith('fragment:cs', { ctx: [this.options.ctx.cs] });
+    this.composeWith('fragment:cs', { options: { ctx: this.options.ctx.cs } });
   }
   if (this.options.ctx.css) {
-    this.composeWith('fragment:css', { ctx: [this.options.ctx.css] });
+    this.composeWith('fragment:css', { options: { ctx: this.options.ctx.css } });
   }
   if (this.options.ctx.html) {
-    this.composeWith('fragment:html', { ctx: [this.options.ctx.html] });
+    this.composeWith('fragment:html', { options: { ctx: this.options.ctx.html } });
   }
   if (this.options.ctx.js) {
-    this.composeWith('fragment:js', { ctx: [this.options.ctx.js] });
+    this.composeWith('fragment:js', { options: { ctx: this.options.ctx.js } });
   }
   if (this.options.ctx.sql) {
-    this.composeWith('fragment:sql', { ctx: [this.options.ctx.sql] });
+    this.composeWith('fragment:sql', { options: { ctx: this.options.ctx.sql } });
   }
 };

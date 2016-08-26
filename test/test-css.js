@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 var path = require('path');
-var helpers = require('yeoman-generator').test;
-var assert = require('yeoman-generator').assert;
+var helpers = require('yeoman-test');
+var assert = require('yeoman-assert');
 
 describe('fragment:css generator tests', function () {
 
@@ -28,9 +28,9 @@ describe('fragment:css generator tests', function () {
     });
     it('can have methods and properties intermixed', function (done) {
       fragment.options.ctx = {
-        _path: 'name0',
-        build0: function (args, $) {
-          var css = $.root();
+        _file: 'name0.css',
+        build0: function (args, $, $$) {
+          var css = $$;
           for (var i = 1; i <= 3; i++) {
             var rule = $.rule({ selector: '[data-heading="' + i + '"]' });
             rule.append($.decl({ prop: 'width', value: (i * 10) }));

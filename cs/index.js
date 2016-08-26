@@ -37,7 +37,7 @@ function buildContent(ctx, parentCtx) {
   var source;
   try {
     var $ = program('');
-    source = this.generateSource(ctx, isValid, toSource, programMap.bind(this), $);
+    source = this.generateSource(ctx, isValid, toSource, map.bind(this), $);
   } catch (e) { this.log(chalk.bold(e)); return; }
 
   // write content
@@ -65,10 +65,10 @@ function toSource(obj, $) {
   return $.toString() + '\n';
 }
 
-function programMap(x, args, $) {
+function map(x, args, $) {
   var self = this;
   var cb = function (table) {
-    return programClassMap.call(self, x, args, table);
+    return classMap.call(self, x, args, table);
   };
   var usings = x.usings;
   var schemaName = x.schemaName || '';
@@ -91,7 +91,7 @@ function append(objs, selector, $) {
   return $;
 }
 
-function programClassMap(element, args, t) {
+function classMap(element, args, t) {
   if (!element.t) {
     this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined'));
     return;
@@ -99,7 +99,7 @@ function programClassMap(element, args, t) {
   _.forEach(element.t, function (x) {
     var self = this;
     var c = function (column) {
-      return knexChainableMap.call(self, x, column);
+      return chainableMap.call(self, x, column);
     };
     if (x.hasOwnProperty('dropMember')) c(t.dropMember(x.dropMember));
     else if (x.hasOwnProperty('renameMember')) c(t.renameMember(x.renameColumn.from, x.renameColumn.to));
@@ -131,7 +131,7 @@ function programClassMap(element, args, t) {
   }.bind(this));
 };
 
-function knexChainableMap(x, c) {
+function chainableMap(x, c) {
   if (x.hasOwnProperty('defaultTo')) c = c.defaultTo(x.defaultTo);
   if (x.hasOwnProperty('attribute')) c = c.attribute(x.attribute);
   if (x.hasOwnProperty('array')) c = c.array(x.array);

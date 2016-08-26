@@ -3,7 +3,7 @@ var fs = require('fs')
 var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
-var assert = require('yeoman-generator').assert;
+var assert = require('yeoman-assert');
 var debug = require('debug')('generator:fragment');
 var chalk = require('chalk');
 var _ = require('lodash');
@@ -27,13 +27,13 @@ var Generator = module.exports = function Generator() {
       debug('Base from file: ' + ctx._name);
     } catch (e) { this.log(chalk.bold(e)); }
   }
-  yeoman.generators.Base.apply(this, arguments);
+  yeoman.Base.apply(this, arguments);
   this.options.ctx = ctx;
 };
 
-util.inherits(Generator, yeoman.generators.NamedBase);
+util.inherits(Generator, yeoman.Base);
 
-Generator.prototype.generateSource = function (args, isValid, toSource, propMethod, $) {
+Generator.prototype.generateSource = function (args, isValid, toSource, propMethod, $, $$) {
   var props = Object.getOwnPropertyNames(args);
   var validProps = props.filter(isValid);
   assert(validProps.length, 'This Context is empty. Add at least one method for it to run.');
@@ -41,13 +41,13 @@ Generator.prototype.generateSource = function (args, isValid, toSource, propMeth
   var source = '';
   function parseNode(item) {
     if (_.isFunction(item)) {
-      source += toSource(item.call(this, args, $), $);
+      source += toSource(item.call(this, args, $, $$), $, $$);
     } else if (_.isArray(item)) {
       _.forEach(item, function (subItem) {
         parseNode(subItem);
       });
     } else if (_.isObject(item)) {
-      source += toSource(propMethod.call(this, item, args, $), $);
+      source += toSource(propMethod.call(this, item, args, $, $$), $, $$);
     }
   }
 

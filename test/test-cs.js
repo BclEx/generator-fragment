@@ -2,8 +2,8 @@
 
 var path = require('path');
 var fs = require('fs');
-var helpers = require('yeoman-generator').test;
-var assert = require('yeoman-generator').assert;
+var helpers = require('yeoman-test');
+var assert = require('yeoman-assert');
 
 describe('fragment:sc test', function () {
 
@@ -39,8 +39,8 @@ describe('fragment:sc test', function () {
         build1: {
           schemaName: 'CORE',
           createClass: 'createClass1', t: [
-            { string: 'Name', attribute: { DisplayName: 'DisplayName' } },
-            { dateTime: 'Date' }]
+            { string: { name: 'Name' }, attribute: { DisplayName: 'DisplayName' } },
+            { dateTime: { name: 'Date' } }]
         }
       };
       fragment.run(function () {

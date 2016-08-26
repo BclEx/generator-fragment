@@ -33,13 +33,11 @@ Generator.prototype.createFiles = function createFiles() {
 };
 
 function buildContent(ctx, parentCtx) {
-  ctx._client = ctx._client || parentCtx._client;
-
   // build content
   var source;
   try {
     var $ = program('', null, { sourceType: 'module', plugins: { jsx: true } });
-    source = this.generateSource(ctx, isValid, toSource, programMap.bind(this), $);
+    source = this.generateSource(ctx, isValid, toSource, map.bind(this), $);
   } catch (e) { this.log(chalk.bold(e)); return; }
 
   // write content
@@ -64,7 +62,7 @@ function toSource(obj) {
   return obj.toString() + '\n';
 }
 
-function programMap(x, args, $) {
+function map(x, args, $) {
   if (x.hasOwnProperty('append')) return append(x.append, '', $);
   else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   return null;

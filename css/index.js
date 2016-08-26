@@ -14,6 +14,7 @@ var scriptBase = require('../script-base.js');
 var debug = require('debug')('generator:fragment');
 var chalk = require('chalk');
 var postcss = require('postcss');
+var _ = require('lodash');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
@@ -35,8 +36,8 @@ function buildContent(ctx, parentCtx) {
   // build content
   var source;
   try {
-    var $ = postcss();
-    source = this.generateSource(ctx, isValid, toSource, postCssMap.bind(this), $);
+    var $ = postcss; var $$ = $.parse('');
+    source = this.generateSource(ctx, isValid, toSource, map.bind(this), $, $$);
   } catch (e) { this.log(chalk.bold(e)); return; }
 
   // write content
@@ -62,12 +63,12 @@ function toSource(obj) {
 }
 
 // [https://github.com/postcss/postcss/blob/master/docs/api.md]
-function postCssMap(x, args, p) {
-  if (x.hasOwnProperty('root')) return p.root(x.root);
-  else if (x.hasOwnProperty('atRule')) return p.atRule(x.atRule);
-  else if (x.hasOwnProperty('rule')) return p.rule(x.rule);
-  else if (x.hasOwnProperty('decl')) return p.decl(x.decl);
-  else if (x.hasOwnProperty('comment')) return p.comment(x.comment);
+function map(x, args, $, $$) {
+  if (x.hasOwnProperty('root')) return $.root(x.root);
+  else if (x.hasOwnProperty('atRule')) return $.atRule(x.atRule);
+  else if (x.hasOwnProperty('rule')) return $.rule(x.rule);
+  else if (x.hasOwnProperty('decl')) return $.decl(x.decl);
+  else if (x.hasOwnProperty('comment')) return $.comment(x.comment);
   else this.log(chalk.red('ERR! ' + JSON.stringify(x) + ' not defined'));
   return null;
 };

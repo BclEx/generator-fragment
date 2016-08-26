@@ -14,6 +14,7 @@ var scriptBase = require('../script-base.js');
 var debug = require('debug')('generator:fragment');
 var chalk = require('chalk');
 var cheerio = require('cheerio'); // [https://github.com/cheeriojs/cheerio]
+var _ = require('lodash');
 
 var Generator = module.exports = function Generator() {
   scriptBase.apply(this, arguments);
@@ -36,7 +37,7 @@ function buildContent(ctx, parentCtx) {
   var source;
   try {
     var $ = cheerio.load('<html />');
-    source = this.generateSource(ctx, isValid, toSource, cheerioMap.bind(this), $);
+    source = this.generateSource(ctx, isValid, toSource, map.bind(this), $);
   } catch (e) { this.log(chalk.bold(e)); return; }
 
   // write content
@@ -61,7 +62,7 @@ function toSource(obj) {
   return obj.html() + '\n';
 }
 
-function cheerioMap(x, args, $) {
+function map(x, args, $) {
   if (x.hasOwnProperty('append')) return append(x.append, 'html', $);
   else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
   return null;

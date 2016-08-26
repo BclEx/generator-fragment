@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 var path = require('path');
-var helpers = require('yeoman-generator').test;
-var assert = require('yeoman-generator').assert;
+var helpers = require('yeoman-test');
+var assert = require('yeoman-assert');
 
 describe('load test', function () {
   it('can be imported without blowing up.', function () {
@@ -12,7 +12,6 @@ describe('load test', function () {
     assert(require('../html') !== undefined);
     assert(require('../js') !== undefined);
     assert(require('../sql') !== undefined);
-    assert(require('../mssql') !== undefined);
   });
 
   var fragment, genOptions = {

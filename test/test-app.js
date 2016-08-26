@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 var path = require('path');
-var helpers = require('yeoman-generator').test;
-var assert = require('yeoman-generator').assert;
+var helpers = require('yeoman-test');
+var assert = require('yeoman-assert');
 
 describe('fragment:app generator tests', function () {
 
@@ -21,26 +21,45 @@ describe('fragment:app generator tests', function () {
           done(err);
         }
         fragment = helpers.createGenerator('fragment:app', [
-           '../app', '../css', '../html', '../js', '../sql', '../sql'
+          '../app', '../cs', '../css', '../html', '../js', '../sql'
         ], [], genOptions);
         done();
       });
     });
     it('can have methods and properties intermixed.', function (done) {
       fragment.options.ctx = {
-        sql: {
-          _path: 'name0',
-          dropTable0: { dropTable: 'dropTable0' },
+        cs: {
+          _file: 'name0.cs',
+          build1: [{
+            createClass: 'createClass1', t: [
+              { string: { name: 'Name' } }]
+          }]
         },
         css: {
-          _path: 'name0',
-          build: [{
-            rule: {selector: '[data-heading="60"]'}
+          _file: 'name0.css',
+          build1: [{
+            rule: { selector: '[data-heading="60"]' }
           }]
+        },
+        _html: {
+          _file: 'name0.html',
+          _build: [{
+            rule: { selector: '[data-heading="60"]' }
+          }]
+        },
+        _js: {
+          _file: 'name0.js',
+          _build: [{
+            rule: { selector: '[data-heading="60"]' }
+          }]
+        },
+        sql: {
+          _file: 'name0.sql',
+          dropTable0: { dropTable: 'dropTable0' },
         },
       };
       fragment.run(function () {
-         // assert.file(['../tmp/name0.css', '../tmp/name0.sql']);
+        // assert.file(['../tmp/name0.css', '../tmp/name0.sql']);
         // assert.fileContent('../tmp/name0.css', /create/);
         done();
       }.bind(fragment));

@@ -40,7 +40,7 @@ function buildContent(ctx, parentCtx) {
   var source;
   try {
     var $ = knex({ client: ctx._client, formatting: true });
-    source = this.generateSource(ctx, isValid, toSource, knexMap.bind(this), $);
+    source = this.generateSource(ctx, isValid, toSource, map.bind(this), $);
   } catch (e) { this.log(chalk.bold(e)); return; }
 
   // write content
@@ -66,10 +66,10 @@ function toSource(obj) {
 }
 
 // [http://knexjs.org/]
-function knexMap(x, args, $) {
+function map(x, args, $) {
   var self = this;
   var cb = function (table) {
-    return knexSchemaMap.call(self, x, args, table);
+    return schemaMap.call(self, x, args, table);
   };
   var cv = function (t, $) {
     return t.call(self, $);
@@ -86,7 +86,7 @@ function knexMap(x, args, $) {
   return null;
 };
 
-function knexSchemaMap(element, args, t) {
+function schemaMap(element, args, t) {
   if (!element.t) {
     this.log(chalk.bold('ERR! ' + chalk.green('{ t: }') + ' not defined'));
     return;
@@ -94,7 +94,7 @@ function knexSchemaMap(element, args, t) {
   _.forEach(element.t, function (x) {
     var self = this;
     var c = function (column) {
-      return knexChainableMap.call(self, x, column);
+      return chainableMap.call(self, x, column);
     };
     if (x.hasOwnProperty('dropColumn')) c(t.dropColumn(x.dropColumn));
     else if (x.hasOwnProperty('dropColumns')) c(t.dropColumns(x.dropColumns));
@@ -139,7 +139,7 @@ function knexSchemaMap(element, args, t) {
   }.bind(this));
 };
 
-function knexChainableMap(x, c) {
+function chainableMap(x, c) {
   if (x.hasOwnProperty('index')) c = c.index(x.index.indexName, x.index.indexType);
   if (x.hasOwnProperty('primary')) c = c.primary();
   if (x.hasOwnProperty('unique')) c = c.unique();
