@@ -26,13 +26,30 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function createFiles() {
-  debug('Building html');
-  var ctx = this.options.ctx;
-  buildContent.call(this, ctx, ctx);
-};
+function isValid(name) {
+  return name.charAt(0) !== '_' && name !== 'constructor';
+}
+
+function toSource(obj) {
+  return obj.html() + '\n';
+}
+
+function append(objs, selector, $) {
+  objs.forEach(function (method) {
+    method(selector, $);
+  });
+  return $;
+}
+
+function map(x, args, $) {
+  // jshint validthis:true
+  if (x.hasOwnProperty('append')) { return append(x.append, 'html', $); }
+  else { this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined')); }
+  return null;
+}
 
 function buildContent(ctx, parentCtx) {
+  // jshint validthis:true
   // build content
   var source;
   try {
@@ -52,25 +69,10 @@ function buildContent(ctx, parentCtx) {
       buildContent.call(self, childCtx, parentCtx);
     });
   }
+}
+
+Generator.prototype.createFiles = function createFiles() {
+  debug('Building html');
+  var ctx = this.options.ctx;
+  buildContent.call(this, ctx, ctx);
 };
-
-function isValid(name) {
-  return name.charAt(0) !== '_' && name !== 'constructor';
-}
-
-function toSource(obj) {
-  return obj.html() + '\n';
-}
-
-function map(x, args, $) {
-  if (x.hasOwnProperty('append')) return append(x.append, 'html', $);
-  else this.log(chalk.bold('ERR! ' + chalk.green(JSON.stringify(x)) + ' not defined'));
-  return null;
-};
-
-function append(objs, selector, $) {
-  objs.forEach(function (method) {
-    method(selector, $);
-  });
-  return $;
-}

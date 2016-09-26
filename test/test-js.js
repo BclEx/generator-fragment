@@ -1,4 +1,5 @@
 'use strict';
+// jshint multistr: true
 
 var path = require('path');
 var fs = require('fs');

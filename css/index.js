@@ -26,13 +26,28 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createFiles = function createFiles() {
-  debug('Building css');
-  var ctx = this.options.ctx;
-  buildContent.call(this, ctx, ctx);
-};
+function isValid(name) {
+  return name.charAt(0) !== '_' && name !== 'constructor';
+}
+
+function toSource(obj) {
+  return obj.toString() + '\n';
+}
+
+// [https://github.com/postcss/postcss/blob/master/docs/api.md]
+function map(x, args, $, $$) {
+  // jshint validthis:true
+  if (x.hasOwnProperty('root')) { return $.root(x.root); }
+  else if (x.hasOwnProperty('atRule')) { return $.atRule(x.atRule); }
+  else if (x.hasOwnProperty('rule')) { return $.rule(x.rule); }
+  else if (x.hasOwnProperty('decl')) { return $.decl(x.decl); }
+  else if (x.hasOwnProperty('comment')) { return $.comment(x.comment); }
+  else { this.log(chalk.red('ERR! ' + JSON.stringify(x) + ' not defined')); }
+  return null;
+}
 
 function buildContent(ctx, parentCtx) {
+  // jshint validthis:true
   // build content
   var source;
   try {
@@ -52,23 +67,10 @@ function buildContent(ctx, parentCtx) {
       buildContent.call(self, childCtx, parentCtx);
     });
   }
-};
-
-function isValid(name) {
-  return name.charAt(0) !== '_' && name !== 'constructor';
 }
 
-function toSource(obj) {
-  return obj.toString() + '\n';
-}
-
-// [https://github.com/postcss/postcss/blob/master/docs/api.md]
-function map(x, args, $, $$) {
-  if (x.hasOwnProperty('root')) return $.root(x.root);
-  else if (x.hasOwnProperty('atRule')) return $.atRule(x.atRule);
-  else if (x.hasOwnProperty('rule')) return $.rule(x.rule);
-  else if (x.hasOwnProperty('decl')) return $.decl(x.decl);
-  else if (x.hasOwnProperty('comment')) return $.comment(x.comment);
-  else this.log(chalk.red('ERR! ' + JSON.stringify(x) + ' not defined'));
-  return null;
+Generator.prototype.createFiles = function createFiles() {
+  debug('Building css');
+  var ctx = this.options.ctx;
+  buildContent.call(this, ctx, ctx);
 };

@@ -1,4 +1,5 @@
 'use strict';
+// jshint multistr: true
 
 var fs = require('fs');
 var path = require('path');
@@ -40,8 +41,8 @@ describe('load test', function () {
     });
     it('can be loaded by name', function (done) {
       fragment.run(function () {
-        assert(this.options.ctx.key == 'value0');
-        assert(this.options.ctx.func() == 'value1');
+        assert(this.options.ctx.key === 'value0');
+        assert(this.options.ctx.func() === 'value1');
         done();
       }.bind(fragment));
     });
@@ -64,8 +65,8 @@ describe('load test', function () {
     });
     it('can be loaded by name as object', function (done) {
       fragment.run(function () {
-        assert(this.options.ctx.key == 'value0');
-        assert(this.options.ctx.func() == 'value1');
+        assert(this.options.ctx.key === 'value0');
+        assert(this.options.ctx.func() === 'value1');
         done();
       }.bind(fragment));
     });
@@ -89,8 +90,8 @@ describe('load test', function () {
         func: function () { return 'value1'; }
       };
       fragment.run(function () {
-        assert(this.options.ctx.key == 'value0');
-        assert(this.options.ctx.func() == 'value1');
+        assert(this.options.ctx.key === 'value0');
+        assert(this.options.ctx.func() === 'value1');
         done();
       }.bind(fragment));
     });
