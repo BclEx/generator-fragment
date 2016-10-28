@@ -1,6 +1,6 @@
 {
   "name": "generator-fragment",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "A Yeoman generator for multiple fragments",
   "license": "MIT",
   "main": "app/index.js",
@@ -24,7 +24,9 @@
     "css",
     "html",
     "js",
-    "sql"
+    "sql",
+    "script-base.js",
+    "util.js"
   ],
   "keywords": [
     "yeoman-generator"
@@ -36,10 +38,10 @@
     "cheerio": "^0.22.0",
     "knex": "^0.11.10",
     "lodash": "^3.9.3",
-    "postcss": "^5.2.2",
+    "postcss": "^5.2.5",
     "yeoman-generator": "^0.24.1",
     "yeoman-test": "^1.5.1",
-    "yosay": "^1.2.0"
+    "yosay": "^1.2.1"
   },
   "devDependencies": {
     "debug": "^2.2.0",
